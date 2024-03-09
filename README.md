@@ -1,7 +1,5 @@
 ## Documentation
 
-Haply API
-
 ### Processing (py5)
 
 [py5 module](http://py5coding.org/)
