@@ -1,4 +1,4 @@
-from py5 import Sketch as PSketch, CORNER, Py5Vector as PVector, sketch
+from py5 import Sketch as PSketch, CORNER, Py5Vector as PVector
 from system.operating_system import OperatingSystem
 from processing.screen import BASE_FRAME_RATE, SCREEN_PIXEL_HEIGHT, SCREEN_PIXEL_WIDTH
 from haply.haply import Haply
@@ -6,7 +6,7 @@ from world_map.map import Map
 from player.player import Player
 from scheduler.scheduler import Scheduler
 from system.diagnostics import Diagnostics
-from system.environment import Environment
+from system.environment import Environment, ROOT_DIRECTORY
 
 
 class Sketch(PSketch):
@@ -26,6 +26,11 @@ class Sketch(PSketch):
         self.size(SCREEN_PIXEL_WIDTH, SCREEN_PIXEL_HEIGHT)
 
     def setup(self):
+
+        self.window_title("HapTrio")
+        self.get_surface().set_icon(
+            self.load_image(f"{ROOT_DIRECTORY}/data/images/icon.png")
+        )
         self.frame_rate(BASE_FRAME_RATE)
         self.haply = Haply()
         self.rect_mode(CORNER)
