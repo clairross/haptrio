@@ -61,5 +61,5 @@ class Sketch(PSketch):
     def exiting(self):
         print("Exiting")
 
-    def mousePressed(self):
+    def mouse_pressed(self):
         print("Mouse pressed")
