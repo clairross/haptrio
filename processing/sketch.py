@@ -1,5 +1,4 @@
-import py5
-from py5 import Sketch as PSketch, CORNER, Py5Vector as PVector
+from py5 import Sketch as PSketch, CORNER, Py5Vector as PVector, sketch
 from system.operating_system import OperatingSystem
 from processing.screen import BASE_FRAME_RATE, SCREEN_PIXEL_HEIGHT, SCREEN_PIXEL_WIDTH
 from haply.haply import Haply

@@ -1,7 +1,6 @@
-import py5
-from py5 import Py5Vector as PVector, get_current_sketch, create_shape
+from py5 import Py5Vector as PVector, Sketch as PSketch, ELLIPSE, color
+from processing.sketch_manager import SketchManager
 
-sketch = get_current_sketch()
 # from shapes.circle import Circle
 from system.environment import DEBUG_MODE
 
@@ -18,27 +17,29 @@ class Player:
     mass: float = 1
     cross_section_area: float = 1
     is_moving_into_wall: bool
+    sketch: PSketch
 
     def __init__(self, initial_position: PVector):
         print(f"Creating player at {initial_position}")
-        self.playerBall = create_shape(
-            py5.ELLIPSE,
+        self.sketch = SketchManager.get_current_sketch()
+        self.playerBall = self.sketch.create_shape(
+            ELLIPSE,
             initial_position.x,
             initial_position.y,
             self.player_size,
             self.player_size,
         )
-        self.playerBall.set_stroke(py5.color(10))
+        self.playerBall.set_stroke(color(10))
         self.playerBall.stroke_weight(10)
 
-        self.player_shell = py5.create_shape(
-            py5.ELLIPSE,
+        self.player_shell = self.sketch.create_shape(
+            ELLIPSE,
             initial_position.x,
             initial_position.y,
             self.shell_size,
             self.shell_size,
         )
-        self.player_shell.set_stroke(py5.color(150))
+        self.player_shell.set_stroke(color(150))
         self.player_shell.stroke_weight(15)
         self.is_moving_into_wall = False
         self.position = initial_position
@@ -62,20 +63,20 @@ class Player:
         )
 
         if DEBUG_MODE:
-            sketch.push_matrix()
-            sketch.line(
+            self.sketch.push_matrix()
+            self.sketch.line(
                 self.position.x, self.position.y, old_position.x, old_position.y
             )
-            sketch.pop_matrix()
+            self.sketch.pop_matrix()
 
     def draw(self):
-        sketch.push_matrix()
-        sketch.shape(self.player_shell)
-        sketch.push_matrix()
-        sketch.translate(self.position.x, self.position.y)
-        sketch.shape(self.playerBall)
-        sketch.pop_matrix()
-        sketch.pop_matrix()
+        self.sketch.push_matrix()
+        self.sketch.shape(self.player_shell)
+        self.sketch.push_matrix()
+        self.sketch.translate(self.position.x, self.position.y)
+        self.sketch.shape(self.playerBall)
+        self.sketch.pop_matrix()
+        self.sketch.pop_matrix()
 
     def get_shell_penetration_resistance_force(self):
         shell_penetration_force = self.shell_penetration * self.k_spring_shell

@@ -1,10 +1,11 @@
-# from sandbox import TestSketch as Sketch
-
 from processing.sketch import Sketch
+from processing.sketch_manager import SketchManager
 
 
 def __main__():
-    Sketch().run_sketch()
+    sketch = Sketch()
+    SketchManager.set_current_sketch(sketch)
+    sketch.run_sketch("HapTrio")
 
 
 __main__()

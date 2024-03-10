@@ -1,4 +1,3 @@
-import py5
 from py5 import (
     Py5Vector as PVector,
     Py5Color as Color,
@@ -11,7 +10,8 @@ from py5 import (
     PIE,
     CHORD,
     OPEN,
-    get_current_sketch,
+    color,
+    no_stroke,
 )
 from abc import ABC, abstractmethod
 import json
@@ -87,11 +87,11 @@ class Shape(ABC):
             stroke_cap_style = STROKE_STYLE_MAP[stroke["cap"]]
             stroke_join_style = STROKE_JOIN_STYLE_MAP[stroke["join"]]
         else:
-            stroke_color = py5.color(0)
+            stroke_color = color(0)
             stroke_weight = 1
             stroke_cap_style = SQUARE
             stroke_join_style = MITER
-            py5.no_stroke()
+            no_stroke()
 
         return cls(
             shape_type,
