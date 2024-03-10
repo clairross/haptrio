@@ -1,5 +1,6 @@
 """Scheduler class to schedule tasks."""
 
+import sys
 from threading import Timer
 from typing import Callable, cast, TypeVar
 from scheduler.timer_scale import TimeScale
@@ -49,7 +50,10 @@ class Scheduler[T]:
 
         timer = Timer(self.__loop_time__, self.__run_loop__)
         timer.daemon = True
-        timer.start()
+        try:
+            timer.start()
+        except:
+            print("New thread not started. Exiting...")
 
     def __to_seconds__(self, n: float, time_scale: TimeScale) -> float:
         """Convert time to milliseconds."""
