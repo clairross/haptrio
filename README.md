@@ -6,14 +6,17 @@
 
 ### Haply 2DIY
 
-https://haply.gitlab.io/Internal/hardware-api-python/index.html
 [Source Code](https://gitlab.com/Haply/public/python_samples)
+
 [Pyhapi repository](https://gitlab.com/Haply/2diy/pyhapi)
+
 [Pyhapi repository - source code](https://gitlab.com/Haply/2diy/pyhapi/-/blob/master/src/HaplyHAPI.py?ref_type=heads)
 
 ## Setup
 
-Create a file called ".env" and put add the following information:
+### Setting Up Environment
+
+Create a file called ".env" at the root of the project (it should be in the same folder as `main.py`) and put add the following information:
 
 ```
 {
@@ -23,3 +26,7 @@ Create a file called ".env" and put add the following information:
 ```
 
 This file is not added to the repository since it is unique to each physical machine.
+
+### Running in VSCode
+
+When running in VSCode, press `F5` to start the program. Debugging is set up, and breakpoints should work.
