@@ -1,10 +1,9 @@
 """This module contains the Haply class, which is used to control the Haply device."""
 
-from typing import Final, cast
-from HaplyHAPI import Board as HBoard, Device as HDevice, Pantograph as HPantograph
+from typing import Final
 from py5 import Py5Vector as PVector
 from system.ports import Ports
-from haply._types import Board, Device, Pantograph, COUNTER_CLOCKWISE
+from haply.types import Board, Device, Pantograph, COUNTER_CLOCKWISE
 from system.environment import DEVICE_PORT
 
 
@@ -27,22 +26,22 @@ class Haply:
     def __init__(self, com_port: str = DEVICE_PORT):
         ports = Ports()
 
-        if com_port is not DEVICE_PORT and com_port is "":
+        if not ports.has_port(com_port):
             self.port = ports.select_port()
         else:
             self.port = DEVICE_PORT
 
         print("Starting the application!")
-        self.board: Board = cast(Board, HBoard(self.port, self.port, self.BAUD_RATE))
-        self.device: Device = cast(Device, HDevice(self.DEVICE_ID, self.board))
-        pantograph = cast(Pantograph, HPantograph(self.HARDWARE_VERSION))
+        self.board: Board = Board(self.port, self.port, self.BAUD_RATE)
+        self.device: Device = Device(self.DEVICE_ID, self.board)
+        pantograph = Pantograph(self.HARDWARE_VERSION)
+        # self.device.add_analog_sensor("A2")
         self.device.set_mechanism(pantograph)
 
         self.device.add_actuator(1, COUNTER_CLOCKWISE, 2)
         self.device.add_actuator(2, COUNTER_CLOCKWISE, 1)
         self.device.add_encoder(1, COUNTER_CLOCKWISE, 168, self.TICKS_PER_ROTATION, 1)
         self.device.add_encoder(2, COUNTER_CLOCKWISE, 12, self.TICKS_PER_ROTATION, 2)
-
         self.device.device_set_parameters()
 
     def update(self):
