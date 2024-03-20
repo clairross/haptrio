@@ -61,7 +61,8 @@ class Sketch(PSketch):
             self.player.draw()
             self.pop_matrix()
         except Exception as e:
-            print(e)
+            print(e.with_traceback)
+            raise e
 
     def exiting(self):
         print("Exiting")
