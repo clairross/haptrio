@@ -1,7 +1,6 @@
 from py5 import Py5Vector as PVector, Sketch as PSketch, ELLIPSE, color
 from processing.sketch_manager import SketchManager
-
-# from shapes.circle import Circle
+from shapes.circle import Circle
 from system.environment import DEBUG_MODE
 
 
@@ -18,19 +17,12 @@ class Player:
     cross_section_area: float = 1
     is_moving_into_wall: bool
     sketch: PSketch
+    player_ball: Circle
 
     def __init__(self, initial_position: PVector):
         print(f"Creating player at {initial_position}")
         self.sketch = SketchManager.get_current_sketch()
-        self.playerBall = self.sketch.create_shape(
-            ELLIPSE,
-            initial_position.x,
-            initial_position.y,
-            self.player_size,
-            self.player_size,
-        )
-        self.playerBall.set_stroke(color(10))
-        self.playerBall.stroke_weight(10)
+        self.player_ball = Circle(initial_position, self.player_size, color(10))
 
         self.player_shell = self.sketch.create_shape(
             ELLIPSE,
@@ -40,13 +32,14 @@ class Player:
             self.shell_size,
         )
         self.player_shell.set_stroke(color(150))
-        self.player_shell.stroke_weight(15)
+        self.player_shell.set_stroke_weight(15)
         self.is_moving_into_wall = False
         self.position = initial_position
         self.velocity = PVector(0, 0)
         self.wall_penetration = PVector(0, 0)
         self.shell_penetration_distance = 0
         self.shell_penetration = PVector(0, 0)
+        print(f"Player created at {self.position}")
         # self.shell = Circle(self.position, self.shellSize, py5.color(150))
 
     def update(self, position_offset: PVector):
@@ -74,7 +67,7 @@ class Player:
         self.sketch.shape(self.player_shell)
         self.sketch.push_matrix()
         self.sketch.translate(self.position.x, self.position.y)
-        self.sketch.shape(self.playerBall)
+        self.sketch.shape(self.player_ball)
         self.sketch.pop_matrix()
         self.sketch.pop_matrix()
 
