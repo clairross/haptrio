@@ -52,6 +52,10 @@ class Ports:
 
         return -1
 
+    def has_port(self, port_name: str) -> bool:
+        """Check if the port name is available."""
+        return port_name in self.available_com_ports.values()
+
     def get_port_name(self, port_id: int) -> str:
         """Get the port name from the port id."""
         return self.available_com_ports[port_id]
