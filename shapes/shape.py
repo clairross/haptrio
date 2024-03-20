@@ -3,27 +3,27 @@ from py5 import (
     Py5Color as Color,
     Py5Shape as PShape,
     SQUARE,
-    PROJECT,
-    ROUND,
+    LINE,
+    ARC,
+    ELLIPSE,
+    RECT,
+    QUAD,
+    TRIANGLE,
     MITER,
-    BEVEL,
-    PIE,
-    CHORD,
-    OPEN,
     color,
     no_stroke,
+    Sketch as PSketch,
 )
 from abc import ABC, abstractmethod
-import json
 import uuid
-from collections import defaultdict
+from processing.sketch_manager import SketchManager
 from shared_types._types import JSON
-
-CIRCLE_BUTTON = 20
-CIRCLE = 18
-STROKE_STYLE_MAP = {"Square": SQUARE, "Project": PROJECT, "Round": ROUND}
-STROKE_JOIN_STYLE_MAP = {"Miter": MITER, "Bevel": BEVEL, "Round": ROUND}
-MODE_MAP = {"Pie": PIE, "Chord": CHORD, "Open": OPEN}
+from shapes.types import (
+    CIRCLE,
+    CIRCLE_BUTTON,
+    STROKE_JOIN_STYLE_MAP,
+    STROKE_STYLE_MAP,
+)
 
 
 class Shape(ABC):
