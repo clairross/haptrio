@@ -30,28 +30,16 @@ class Line:
     def get_vertices(self) -> List[PVector]:
         return self.vertices
 
-    def get_intersection_line(self, other: "Line") -> Optional[PVector]:
+    def __get_intersection_line(self, other: "Line") -> Optional[PVector]:
         return None
 
-    def get_intersection_triangle(self, other: "Triangle") -> Optional[PVector]:
+    def __get_intersection_rect(self, other: "Rectangle") -> Optional[PVector]:
         return None
 
-    def get_intersection_quad(self, other: "Quadrilateral") -> Optional[PVector]:
+    def __get_intersection_square(self, other: "Square") -> Optional[PVector]:
         return None
 
-    def get_intersection_rect(self, other: "Rectangle") -> Optional[PVector]:
-        return None
-
-    def get_intersection_square(self, other: "Square") -> Optional[PVector]:
-        return None
-
-    def get_intersection_ellipse(self, other: "Ellipse") -> Optional[PVector]:
-        return None
-
-    def get_intersection_arc(self, other: "Arc") -> Optional[PVector]:
-        return None
-
-    def get_intersection_circle(self, other: "Circle") -> Optional[PVector]:
+    def __get_intersection_circle(self, other: "Circle") -> Optional[PVector]:
         return None
 
     def print(self):

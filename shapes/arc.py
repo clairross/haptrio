@@ -34,30 +34,6 @@ class Arc(Shape):
     def get_size(self) -> PVector:
         return self.size
 
-    def get_intersection_circle(self, circle: "Circle") -> Optional[PVector]:
-        return None
-
-    def get_intersection_line(self, line: "Line") -> Optional[PVector]:
-        return None
-
-    def get_intersection_triangle(self, triangle: "Triangle") -> Optional[PVector]:
-        return None
-
-    def get_intersection_quad(self, quad: "Quadrilateral") -> Optional[PVector]:
-        return None
-
-    def get_intersection_rect(self, rect: "Rectangle") -> Optional[PVector]:
-        return None
-
-    def get_intersection_ellipse(self, ellipse: "Ellipse") -> Optional[PVector]:
-        return None
-
-    def get_intersection_arc(self, arc: "Arc") -> Optional[PVector]:
-        return None
-
-    def get_intersection_square(self, square: "Square") -> Optional[PVector]:
-        return None
-
     def print(self):
         print(
             f"Arc {self.id}: Center = {self.center}, Size = {self.size}, Start Angle = {self.start_angle}, End Angle = {self.end_angle}, Mode = {self.mode}"

@@ -31,30 +31,6 @@ class Quadrilateral(Shape):
     def get_fill_color(self):
         return self.fillColor
 
-    def get_intersection_line(self, line) -> Optional[PVector]:
-        return line.get_intersection_quad(self)
-
-    def get_intersection_triangle(self, triangle) -> Optional[PVector]:
-        return triangle.get_intersection_quad(self)
-
-    def get_intersection_quad(self, quad) -> Optional[PVector]:
-        return quad.get_intersection_quad(self)
-
-    def get_intersection_rect(self, rect) -> Optional[PVector]:
-        return rect.get_intersection_quad(self)
-
-    def get_intersection_ellipse(self, ellipse) -> Optional[PVector]:
-        return ellipse.get_intersection_quad(self)
-
-    def get_intersection_arc(self, arc) -> Optional[PVector]:
-        return arc.get_intersection_quad(self)
-
-    def get_intersection_square(self, other) -> Optional[PVector]:
-        return None
-
-    def get_intersection_circle(self, other) -> Optional[PVector]:
-        return None
-
     def print(self):
         print(f"Quadrilateral {self.id}: Vertices = {self.vertices}")
 

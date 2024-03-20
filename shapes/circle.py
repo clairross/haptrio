@@ -53,7 +53,20 @@ class Circle(Shape):
     def get_size(self) -> float:
         return self.diameter
 
-    # ... other methods ...
+    def __get_intersection_line(self, line: "Line") -> Union[PVector, None]:
+        return line.__get_intersection_circle(self)
+
+    def __get_intersection_rect(self, rect: "Rectangle") -> Union[PVector, None]:
+        return rect.__get_intersection_circle(self)
+
+    def __get_intersection_square(self, square: "Square") -> Union[PVector, None]:
+        return square.__get_intersection_circle(self)
+
+    def __get_intersection_circle(self, circle: "Circle") -> Union[PVector, None]:
+        return circle.__get_intersection_circle(self)
+
+    def print(self):
+        print(f"Circle {self.id}: Center = {self.center}, Diameter = {self.diameter}")
 
 
 class CircleButton(Circle):

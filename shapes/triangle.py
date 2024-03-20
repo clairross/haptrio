@@ -43,29 +43,5 @@ class Triangle(Shape):
     def get_fill_color(self) -> Color:
         return self.fill_color
 
-    def get_intersection_line(self, line: Line) -> Optional[PVector]:
-        return line.get_intersection_triangle(self)
-
-    def get_intersection_triangle(self, triangle: Triangle) -> Optional[PVector]:
-        return triangle.get_intersection_triangle(self)
-
-    def get_intersection_quad(self, quad: Quadrilateral) -> Optional[PVector]:
-        return quad.get_intersection_triangle(self)
-
-    def get_intersection_rect(self, rect: Rectangle) -> Optional[PVector]:
-        return rect.get_intersection_triangle(self)
-
-    def get_intersection_ellipse(self, ellipse: Ellipse) -> Optional[PVector]:
-        return ellipse.get_intersection_triangle(self)
-
-    def get_intersection_arc(self, arc: Arc) -> Optional[PVector]:
-        return arc.get_intersection_triangle(self)
-
-    def get_intersection_square(self, other: Square) -> Optional[PVector]:
-        return None
-
-    def get_intersection_circle(self, other: Circle) -> Optional[PVector]:
-        return None
-
     def print(self) -> None:
         print(f"Triangle {self.id}: Vertices = {self.vertices}")

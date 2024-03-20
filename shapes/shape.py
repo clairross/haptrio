@@ -104,37 +104,51 @@ class Shape(ABC):
             id,
         )
 
-    @abstractmethod
-    def get_intersection_line(self, other: Shape):
-        pass
+    def get_intersection(self, other: "Shape") -> PVector:
+        other_type = other.shape_type
 
-    @abstractmethod
-    def get_intersection_triangle(self, other: Shape):
-        pass
+        if other_type == CIRCLE or other_type == CIRCLE_BUTTON:
+            return self.__get_intersection_circle(other)
+        elif other_type == LINE:
+            return self.__get_intersection_line(other)
+        elif other_type == TRIANGLE:
+            return self.__get_intersection_triangle(other)
+        elif other_type == QUAD:
+            return self.__get_intersection_quad(other)
+        elif other_type == RECT:
+            return self.__get_intersection_rect(other)
+        elif other_type == SQUARE:
+            return self.__get_intersection_square(other)
+        elif other_type == ELLIPSE:
+            return self.__get_intersection_ellipse(other)
+        elif other_type == ARC:
+            return self.__get_intersection_arc(other)
+        else:
+            raise NotImplementedError
 
-    @abstractmethod
-    def get_intersection_quad(self, other: Shape):
-        pass
+    def __get_intersection_line(self, other: "Shape") -> PVector:
+        raise NotImplementedError
 
-    @abstractmethod
-    def get_intersection_rect(self, other: Shape):
-        pass
+    def __get_intersection_triangle(self, other: "Shape") -> PVector:
+        raise NotImplementedError
 
-    @abstractmethod
-    def get_intersection_square(self, other: Shape):
-        pass
+    def __get_intersection_quad(self, other: "Shape") -> PVector:
+        raise NotImplementedError
 
-    @abstractmethod
-    def get_intersection_ellipse(self, other: Shape):
-        pass
+    def __get_intersection_rect(self, other: "Shape") -> PVector:
+        raise NotImplementedError
 
-    @abstractmethod
-    def get_intersection_arc(self, other: Shape):
-        pass
+    def __get_intersection_square(self, other: "Shape") -> PVector:
+        raise NotImplementedError
 
-    @abstractmethod
-    def get_intersection_circle(self, other: Shape):
-        pass
+    def __get_intersection_ellipse(self, other: "Shape") -> PVector:
+        raise NotImplementedError
+
+    def __get_intersection_arc(self, other: "Shape") -> PVector:
+        raise NotImplementedError
+
+    def __get_intersection_circle(self, other: "Shape") -> PVector:
+        raise NotImplementedError
 
     @abstractmethod
     def get_position(self):
