@@ -36,18 +36,20 @@ class Shape(ABC):
     stroke_cap_style: int
     stroke_join_style: int
     id: str
+    sketch: PSketch
 
     def __init__(
         self,
         shape_type: int,
         visible: bool = True,
         enabled: bool = True,
-        stroke_color: Color = Color(0),
+        stroke_color: Color = color(0),
         stroke_weight: float = 0,
         stroke_cap_style: int = SQUARE,
         stroke_join_style: int = MITER,
         id: str = "",
     ):
+        self.sketch = SketchManager.get_current_sketch()
         self.shape_type = shape_type
         self.visible = visible
         self.enabled = enabled
@@ -63,7 +65,7 @@ class Shape(ABC):
 
     @classmethod
     def from_json(cls, shape_type: int, json: JSON) -> "Shape":
-        stroke_color: Colour = Color(0)
+        stroke_color: Colour = color(0)
         stroke_weight: float
         stroke_cap_style: int
         stroke_join_style: int
@@ -169,7 +171,7 @@ class Shape(ABC):
                 color_string = color_string[1:]
             if len(color_string) == 6:
                 color_string = "FF" + color_string
-            return Color(color_string)
+            return color(color_string)
         except Exception as e:
             print(f"Error parsing color from JSON: {e}")
-            return Color(0)
+            return color(0)

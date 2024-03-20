@@ -1,15 +1,8 @@
-from py5 import (
-    Py5Vector as PVector,
-    color,
-    Py5Color as Color,
-    ELLIPSE,
-    get_current_sketch,
-)
+from py5 import Py5Vector as PVector, color, Py5Color as Color, ELLIPSE
 from typing import List, Tuple, Union, Callable
 from shapes.shape import Shape
-from shared_types.types import JSON
-
-sketch = get_current_sketch()
+from shapes.types import CIRCLE
+from shared_types._types import JSON
 
 
 class Circle(Shape):
@@ -20,13 +13,13 @@ class Circle(Shape):
     initial_position: PVector
 
     def __init__(self, center: PVector, diameter: float, fill_color: Color):
-        super().__init__(obj, CIRCLE)
+        super().__init__(CIRCLE)
         self.center = center
         self.diameter = diameter
         self.fill_color = fill_color
         self.radius = self.diameter / 2
         self.initial_position = self.center
-        self.shape = sketch.create_shape(
+        self.shape = self.sketch.create_shape(
             ELLIPSE, *self.center, self.diameter, self.diameter
         )
 
