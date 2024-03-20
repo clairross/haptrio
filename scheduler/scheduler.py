@@ -67,29 +67,3 @@ class Scheduler[T]:
             return n * 60
         elif time_scale == TimeScale.HOURS:
             return n * 60 * 60
-
-
-# start_time = time.time()
-
-
-# def scheduled_task(msg: str = "hello, world", **kwargs: str):
-#     print((time.time() - start_time) * 1000, "scheduled_task:", msg, kwargs)
-
-
-# sch = Scheduler(0.5, scheduled_task, "Fast")
-
-# sch.run()
-
-# time.sleep(5)
-
-# sch.stop()
-
-
-# start_time = time.perf_counter()
-# loop_time = 0.001  # 1ms
-# while True:
-#     position, velocity = inverse3.end_effector_force()
-#     print("position: {}".format(position))
-#     while time.perf_counter() - start_time < loop_time:  # wait for loop time to be reached
-#         pass
-#     start_time = time.perf_counter()
