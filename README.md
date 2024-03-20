@@ -27,6 +27,27 @@ Create a file called ".env" at the root of the project (it should be in the same
 
 This file is not added to the repository since it is unique to each physical machine.
 
+#### Installing Dependencies
+
+Download and install Python (version 3.12 and up) and a Python package manager, such as `conda` or `pip`.
+
+To install `pip`, in the command line use
+
+```
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+rm .\get-pip.py
+```
+
+Then type `pip help` to check that it worked. It should show a list of commands. If so, install the following dependencies using the `pip install *` command, replacing `*` with the following:
+
+- `py5`, Python support of [Processing 5](http://py5coding.org/).
+- `HaplyHAPI` - The Python implementation of hAPI, [Pyhapi](https://gitlab.com/Haply/2diy/pyhapi/-/tree/master).
+- `ujson` - A faster library than the built-in `json` which allows the reading of `.json` files from the computer.
+- `install-jdk` - The Java Development Kit for Python, which allows the use of Processing, which is originally based in Java.
+
+To install the right version of Java use `python -c "import jdk; print('Java installed to', jdk.install('17'))"`
+
 ### Running in VSCode
 
 When running in VSCode, press `F5` to start the program. Debugging is set up, and breakpoints should work.
