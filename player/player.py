@@ -18,6 +18,7 @@ class Player:
     is_moving_into_wall: bool
     sketch: PSketch
     player_ball: Circle
+    shell: Circle
 
     def __init__(self, initial_position: PVector):
         print(f"Creating player at {initial_position}")
@@ -31,12 +32,14 @@ class Player:
             self.shell_size,
             self.shell_size,
         )
-        self.player_shell.set_stroke(color(150))
+        self.player_shell.set_stroke(color("#FF0000"))
+        # self.player_shell.set_stroke(color(150))
         self.player_shell.set_stroke_weight(15)
         self.is_moving_into_wall = False
         self.position = initial_position
         self.velocity = PVector(0, 0)
         self.wall_penetration = PVector(0, 0)
+        self.shell = Circle(initial_position, self.shell_size, color("#FF0000"))
         self.shell_penetration_distance = 0
         self.shell_penetration = PVector(0, 0)
         print(f"Player created at {self.position}")
@@ -63,15 +66,17 @@ class Player:
             self.sketch.pop_matrix()
 
     def draw(self):
+        print(f"Drawing player at {self.position}")
         self.sketch.push_matrix()
         self.sketch.shape(self.player_shell)
         self.sketch.push_matrix()
-        self.sketch.translate(self.position.x, self.position.y)
-        self.sketch.shape(self.player_ball)
+        # self.sketch.translate(self.position.x, self.position.y)
+        self.player_ball.draw()
+        self.shell.draw()
         self.sketch.pop_matrix()
         self.sketch.pop_matrix()
 
-    def get_shell_penetration_resistance_force(self):
+    def get_shell_penetration_resistance_force(self) -> PVector:
         shell_penetration_force = self.shell_penetration * self.k_spring_shell
 
         if self.is_moving_into_wall:

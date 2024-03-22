@@ -15,7 +15,6 @@ from py5 import (
     Sketch as PSketch,
 )
 from abc import ABC, abstractmethod
-import uuid
 from processing.sketch_manager import SketchManager
 from shared_types._types import JSON
 from shapes.types import (
@@ -24,6 +23,8 @@ from shapes.types import (
     STROKE_JOIN_STYLE_MAP,
     STROKE_STYLE_MAP,
 )
+from random import randint
+from uuid import uuid4
 
 
 class Shape(ABC):
@@ -35,7 +36,7 @@ class Shape(ABC):
     stroke_weight: float
     stroke_cap_style: int
     stroke_join_style: int
-    id: str
+    uuid: str
     sketch: PSketch
 
     def __init__(
@@ -47,8 +48,13 @@ class Shape(ABC):
         stroke_weight: float = 0,
         stroke_cap_style: int = SQUARE,
         stroke_join_style: int = MITER,
-        id: str = "",
+        uuid: str = "",
     ):
+        if uuid != "":
+            self.uuid = uuid
+        else:
+            self.uuid = str(uuid4())
+
         self.sketch = SketchManager.get_current_sketch()
         self.shape_type = shape_type
         self.visible = visible
@@ -57,11 +63,6 @@ class Shape(ABC):
         self.stroke_weight = stroke_weight
         self.stroke_cap_style = stroke_cap_style
         self.stroke_join_style = stroke_join_style
-
-        if id != "":
-            self.id = id
-        else:
-            self.id = str(uuid.uuid4())
 
     @classmethod
     def from_json(cls, shape_type: int, json: JSON) -> "Shape":
@@ -74,12 +75,12 @@ class Shape(ABC):
         stroke_join_style: int
         visible: bool = True
         enabled: bool = True
-        id: str
+        uuid: str
 
         if json and "id" in json.keys():
-            id = json["id"]
+            uuid = json["id"]
         else:
-            id = ""
+            uuid = ""
 
         if json and "stroke" in json:
             stroke = json["stroke"]
@@ -103,8 +104,18 @@ class Shape(ABC):
             stroke_weight,
             stroke_cap_style,
             stroke_join_style,
-            id,
+            uuid,
         )
+
+    def draw(self):
+        if not self.visible:
+            return
+
+        print(f"Drawing shape {self.uuid} at {self.get_position()}")
+        self.sketch.shape(self.shape)
+        self.sketch.fill(randint(1, 255), randint(1, 255), randint(1, 255))
+        print(f"Drawing square at {self.sketch.mouse_x}, {self.sketch.mouse_y}")
+        self.sketch.square(self.sketch.mouse_x, self.sketch.mouse_y, 80)
 
     def get_intersection(self, other: "Shape") -> PVector:
         other_type = other.shape_type
@@ -153,7 +164,7 @@ class Shape(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_position(self):
+    def get_position(self) -> PVector:
         pass
 
     @abstractmethod

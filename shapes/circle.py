@@ -22,6 +22,7 @@ class Circle(Shape):
         self.shape = self.sketch.create_shape(
             ELLIPSE, *self.center, self.diameter, self.diameter
         )
+        self.shape.set_fill(self.fill_color)
 
     @classmethod
     def from_json(cls, json: JSON) -> "Circle":
