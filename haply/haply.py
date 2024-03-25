@@ -52,6 +52,7 @@ However, you can continue using the program without it."
         self.device.add_encoder(2, COUNTER_CLOCKWISE, 12, self.TICKS_PER_ROTATION, 2)
         self.device.device_set_parameters()
         self.is_active = True
+        print("Haply device is active!")
 
     def update(self):
         """Update the Haply, read data from the device and set the torques."""

@@ -5,7 +5,7 @@ https://gitlab.com/Haply/2diy/pyhapi/-/blob/master/src/HaplyHAPI.py?ref_type=hea
 """
 
 import sys
-from typing import List, Protocol, Final
+from typing import List, Final
 from HaplyHAPI import (
     Actuator as HActuator,
     Device as HDevice,
@@ -150,7 +150,9 @@ class Board(HBoard):
         # expected = expected - 1  # REMOVE
         inData = bytearray(1 + 4 * expected)
         data = [None] * expected
-        inData = self._Board__port.read(1 + 4 * expected)
+        # print("Receiving data from the device.")
+        inData = self._Board__port.read(1 + 4 * expected + 1)
+        # print("Data received from the device, inData: " + str(inData))
         if inData[0] != deviceID:
             sys.stderr.write("Error, another device expects this data!\n")
         buf = inData[1 : expected * 4 + 1]
@@ -158,7 +160,7 @@ class Board(HBoard):
             data[i] = self.bytes_to_float(buf[i * 4 : i * 4 + 4])
         # data = struct.unpack('!'+str(expected)+'f', buf)
         # print(expected)
-        print(data)
+        # print(data)
         return data
 
     def data_available(self) -> bool:
@@ -332,9 +334,9 @@ class Device(HDevice):
         super().device_set_parameters()
 
     def device_read_data(self) -> None:
-        print("Reading data from the device.")
+        # print("Reading data from the device.")
         self._Device__communicationType = 2
-        dataCount = 0
+        data_count = 0
         device_data = self._Device__deviceLink.receive(
             self._Device__communicationType,
             self._Device__deviceID,
@@ -342,15 +344,15 @@ class Device(HDevice):
         )
 
         for i in range(self._Device__sensorsActive):
-            self._Device__sensors[i].set_value(device_data[dataCount])
-            dataCount += 1
+            self._Device__sensors[i].set_value(device_data[data_count])
+            data_count += 1
 
         for i in range(len(self._Device__encoderPositions)):
             if self._Device__encoderPositions[i] > 0:
                 self._Device__encoders[self._Device__encoderPositions[i] - 1].set_value(
-                    device_data[dataCount]
+                    device_data[data_count]
                 )
-                dataCount += 1
+                data_count += 1
 
     def device_read_request(self) -> None:
         """Request data from the device"""

@@ -1,12 +1,8 @@
 """Environment variables"""
 
-from typing import TypeVar, Any, Final, cast
+from typing import TypeVar, cast, NamedTuple
 import ujson as json
 from shared_types._types import JSON
-from pathlib import Path
-import pathlib
-
-ROOT_DIRECTORY: Final[Path] = pathlib.Path().resolve()
 
 
 class JsonReader:
@@ -16,26 +12,31 @@ class JsonReader:
     ENV_FILE_NAME = ".env"
     env_values: JSON
 
-    def get_object[T](self, json_path: str) -> T:
+    @staticmethod
+    def get_object[T](json_path: str) -> T:
         with open(json_path, "r", encoding="utf-8") as json_file:
             json_data: JSON = json.load(json_file)
+            data: T = cast(T, JsonReader.__to_tuple(json_data))
 
-            return cast(T, json_data)
-
-    @staticmethod
-    def get_json_object() -> JSON:
-        with open(
-            f"{ROOT_DIRECTORY}/{Environment.ENV_FILE_NAME}", "r", encoding="utf-8"
-        ) as json_file:
-            Environment.env_values: JSON = json.load(json_file)
-            print(f"Env variables: {Environment.env_values}")
+            return data
 
     @staticmethod
-    def get(key: str) -> Any:
-        """Get environment variable by key."""
-        return Environment.env_values[key]
+    def __to_tuple[T](parsed_dict: JSON) -> NamedTuple:
+        # Define a new named tuple class with the keys of json_data as field names
+        NamedTupleClass = NamedTuple(
+            "NamedTupleClass",
+            [(key, type(value)) for key, value in parsed_dict.items()],
+        )
 
+        [print(f"{key}, {type(value)}") for key, value in parsed_dict.items()]
+        # Create an instance of this class with the values of json_data as field values
+        dict_values = (
+            JsonReader.__to_tuple(value) if isinstance(value, dict) else value
+            for value in parsed_dict.values()
+        )
 
-Environment.initialize()
-DEBUG_MODE: Final[bool] = Environment.get("debug_mode")
-DEVICE_PORT: Final[str] = Environment.get("port")
+        data: T = NamedTupleClass(*dict_values)
+
+        print(data)
+
+        return data

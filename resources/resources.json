@@ -1,0 +1,18 @@
+{
+    "app_icon": "resources/images/icon.png",
+    "images": {
+        "bass_clef": "resources/images/Bass Clef.png",
+        "bass_clef_staff": "resources/images/BassClef_Staff.png",
+        "eighth_note": "resources/images/eighth_note.png",
+        "half_note": "resources/images/half_note.png",
+        "note_inventory_background": "resources/images/repository_block.png",
+        "note_inventory_background_open": "resources/images/repository_block_open.png",
+        "quarter_note": "resources/images/quarter_note.png",
+        "selection_box": "resources/images/yellow box.png",
+        "selection_box_hover": "resources/images/Yellow_Box_Selected.png",
+        "staff": "resources/images/Staff_timesig.png",
+        "treble_clef": "resources/images/treble_clef.png",
+        "treble_clef_staff": "resources/images/TrebleClef_Staff.png",
+        "user_icon_select": "resources/images/click_hand.png"
+    }
+}

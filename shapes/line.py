@@ -1,22 +1,44 @@
-from typing import List, Optional
-import json
-from pvector import PVector
+from py5 import LINE, Py5Vector as PVector, Py5Color as Color, color
+from typing import List
+from shapes.shape import Shape
+from shared_types._types import JSON
 
 
-class Line:
-    def __init__(self, obj: str):
-        self.vertices: List[PVector] = []
-        self.obj = json.loads(obj)
-        points = self.obj["points"]
-        start = points[0]
-        end = points[1]
-        start_vector = PVector(start[0], start[1])
-        end_vector = PVector(end[0], end[1])
-        self.original_start = start_vector.copy()
-        self.original_end = end_vector.copy()
-        self.vertices.append(start_vector)
-        self.vertices.append(end_vector)
-        print(f"Start line: {start_vector}, End line: {end_vector}")
+class Line(Shape):
+    vertices: List[PVector]
+
+    def __init__(
+        self,
+        start: PVector,
+        end: PVector,
+        thickness: float = 1,
+        line_color: Color = color(0),
+    ):
+        super().__init__(LINE)
+        self.vertices = [start, end]
+
+        self.shape = self.sketch.create_shape(LINE, start.x, start.y, end.x, end.y)
+        self.shape.begin_shape()
+        self.shape.vertex(start.x, start.y)
+        self.shape.vertex(end.x, end.y)
+        self.shape.end_shape()
+        self.shape.set_stroke(line_color)
+        self.shape.set_stroke_weight(thickness)
+
+    @classmethod
+    def from_json(cls, json: JSON) -> "Line":
+        start_json = json["start"]
+        end_json = json["end"]
+        thickness = json["thickness"] or 1
+        line_color = cls.get_color_from_json(cls, json, "lineColor")
+        diameter = obj["size"]
+
+        return Line(
+            PVector(end_json[0], end_json[1]),
+            PVector(end_json[0], end_json[1]),
+            thickness,
+            line_color,
+        )
 
     def translate(self, direction: PVector):
         start_vector = self.vertices[0]
@@ -27,20 +49,5 @@ class Line:
     def get_position(self) -> PVector:
         return PVector.lerp(self.vertices[0], self.vertices[1], 0.5)
 
-    def get_vertices(self) -> List[PVector]:
-        return self.vertices
-
-    def __get_intersection_line(self, other: "Line") -> Optional[PVector]:
-        return None
-
-    def __get_intersection_rect(self, other: "Rectangle") -> Optional[PVector]:
-        return None
-
-    def __get_intersection_square(self, other: "Square") -> Optional[PVector]:
-        return None
-
-    def __get_intersection_circle(self, other: "Circle") -> Optional[PVector]:
-        return None
-
     def print(self):
-        print(f"Line {self.id}: Start = {self.vertices[0]} End = {self.vertices[1]}")
+        print(f"Line {self.uuid}: Start = {self.vertices[0]} End = {self.vertices[1]}")

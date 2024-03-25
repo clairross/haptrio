@@ -66,7 +66,8 @@ class Player:
             self.sketch.pop_matrix()
 
     def draw(self):
-        print(f"Drawing player at {self.position}")
+        # print(f"Drawing player at {self.position}")
+        self.sketch.shape(self.player_shell, self.position.x, self.position.y)
         self.sketch.push_matrix()
         self.sketch.shape(self.player_shell)
         self.sketch.push_matrix()

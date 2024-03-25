@@ -23,7 +23,6 @@ from shapes.types import (
     STROKE_JOIN_STYLE_MAP,
     STROKE_STYLE_MAP,
 )
-from random import randint
 from uuid import uuid4
 
 
@@ -111,11 +110,8 @@ class Shape(ABC):
         if not self.visible:
             return
 
-        print(f"Drawing shape {self.uuid} at {self.get_position()}")
-        self.sketch.shape(self.shape)
-        self.sketch.fill(randint(1, 255), randint(1, 255), randint(1, 255))
-        print(f"Drawing square at {self.sketch.mouse_x}, {self.sketch.mouse_y}")
-        self.sketch.square(self.sketch.mouse_x, self.sketch.mouse_y, 80)
+        # print(f"Drawing shape {self.uuid} at {self.get_position()}")
+        self.sketch.shape(self.shape, self.sketch.mouse_x, self.sketch.mouse_y)
 
     def get_intersection(self, other: "Shape") -> PVector:
         other_type = other.shape_type

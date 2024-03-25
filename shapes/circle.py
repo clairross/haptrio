@@ -22,6 +22,8 @@ class Circle(Shape):
         self.shape = self.sketch.create_shape(
             ELLIPSE, *self.center, self.diameter, self.diameter
         )
+        self.shape.begin_shape()
+        self.shape.end_shape()
         self.shape.set_fill(self.fill_color)
 
     @classmethod
