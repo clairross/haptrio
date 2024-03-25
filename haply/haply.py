@@ -22,6 +22,7 @@ class Haply:
     device: Device
     updating: bool = False
     current_force: PVector = PVector(0, 0)
+    is_active: bool = False
 
     def __init__(self, com_port: str = DEVICE_PORT):
         ports = Ports()
@@ -30,6 +31,13 @@ class Haply:
             self.port = ports.select_port()
         else:
             self.port = DEVICE_PORT
+
+        if self.port == "":
+            print(
+                "No available port, no Haply device will be used. \
+However, you can continue using the program without it."
+            )
+            return
 
         print("Starting the application!")
         self.board: Board = Board(self.port, self.port, self.BAUD_RATE)
@@ -43,6 +51,7 @@ class Haply:
         self.device.add_encoder(1, COUNTER_CLOCKWISE, 168, self.TICKS_PER_ROTATION, 1)
         self.device.add_encoder(2, COUNTER_CLOCKWISE, 12, self.TICKS_PER_ROTATION, 2)
         self.device.device_set_parameters()
+        self.is_active = True
 
     def update(self):
         """Update the Haply, read data from the device and set the torques."""

@@ -1,18 +1,25 @@
 from py5 import Sketch as PSketch, CORNER, Py5Vector as PVector
 from system.operating_system import OperatingSystem
-from processing.screen import BASE_FRAME_RATE, SCREEN_PIXEL_HEIGHT, SCREEN_PIXEL_WIDTH
+from processing.screen import (
+    BASE_FRAME_RATE,
+    SCREEN_PIXEL_HEIGHT,
+    SCREEN_PIXEL_WIDTH,
+    SCREEN_CENTER,
+)
 from haply.haply import Haply
 from world_map.map import Map
 from player.player import Player
 from scheduler.scheduler import Scheduler
 from system.diagnostics import Diagnostics
 from system.environment import Environment, ROOT_DIRECTORY
+from random import randint
 
 
 class Sketch(PSketch):
     haply: Haply
     map: Map
     player: Player
+    updateScheduler: Scheduler[None]
     debug_mode: bool
     diagnostics: Diagnostics
 
@@ -35,21 +42,25 @@ class Sketch(PSketch):
         self.haply = Haply()
         self.rect_mode(CORNER)
         self.map = Map()
-        self.player = Player(PVector(0, 0))
+        self.player = Player(SCREEN_CENTER)
 
-        self.scheduler = Scheduler(1, self.update)
-        self.scheduler.run()
+        self.updateScheduler = Scheduler(1, self.update)
+        self.updateScheduler.run()
 
     def update(self):
-        print("Update")
-        self.haply.update()
+        # print("Update")
+
+        if self.haply.is_active:
+            self.haply.update()
+
+        self.player.update(PVector(0, 0))
         self.map.update()
 
     def draw(self):
-        print("Draw")
-        if self.scheduler.is_running:
+        if self.updateScheduler.is_running:
             return
 
+        print("Draw")
         try:
             if self.debug_mode:
                 self.diagnostics.draw()
@@ -69,3 +80,5 @@ class Sketch(PSketch):
 
     def mouse_pressed(self):
         print("Mouse pressed")
+        self.fill(randint(1, 255), randint(1, 255), randint(1, 255))
+        self.square(self.mouse_x, self.mouse_y, 10)
