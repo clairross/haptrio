@@ -44,6 +44,7 @@ Then type `pip help` to check that it worked. It should show a list of commands.
 - `py5`, Python support of [Processing 5](http://py5coding.org/).
 - `HaplyHAPI` - The Python implementation of hAPI, [Pyhapi](https://gitlab.com/Haply/2diy/pyhapi/-/tree/master).
 - `ujson` - A faster library than the built-in `json` which allows the reading of `.json` files from the computer.
+- `pygame` - Uses the `pygame.mixer` module to play audio in multiple channels.
 - `install-jdk` - The Java Development Kit for Python, which allows the use of Processing, which is originally based in Java.
 
 To install the right version of Java use `python -c "import jdk; print('Java installed to', jdk.install('17'))"`

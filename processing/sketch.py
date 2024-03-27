@@ -11,6 +11,9 @@ from shapes.circle import Circle
 from shapes.line import Line
 from resources.resource_manager import ResourceManager, Resources
 from processing.screen import Screen
+from haply.haply_controller import HaplyController
+from controls.controller import Controller
+from pygame.mixer import init as InitializeAudioMixer
 
 
 class Sketch(PSketch):
@@ -21,6 +24,7 @@ class Sketch(PSketch):
     debug_mode: bool
     diagnostics: Diagnostics
     screen: Screen
+    player_controller: Controller
 
     def settings(self):
         self.debug_mode = Environment.get("debug_mode")
@@ -41,9 +45,11 @@ class Sketch(PSketch):
         self.screen.set_window_resizable(True)
         self.frame_rate(self.screen.frame_rate)
         self.rect_mode(CORNER)
+        InitializeAudioMixer()
         self.map = Map()
         self.haply = Haply()
         self.player = Player(self.screen.center)
+        self.player_controller = HaplyController(self.player, self.haply)
 
         self.updateScheduler = Scheduler(1, self.update)
         self.updateScheduler.run()
@@ -56,7 +62,8 @@ class Sketch(PSketch):
             self.haply.update()
 
         self.map.update()
-        self.player.update(PVector(0, 0))
+        self.player_controller.update()
+        self.player.update()
 
     def draw(self):
         if self.updateScheduler.is_running:
@@ -81,16 +88,12 @@ class Sketch(PSketch):
     def mouse_pressed(self):
         print("Mouse pressed")
         mouse_position = PVector(self.mouse_x, self.mouse_y)
-        c11 = Circle(mouse_position, 10, fill_color=color(255, 0, 0))
-        c11.draw()
-        self.fill(randint(1, 255), randint(1, 255), randint(1, 255))
-        self.square(self.mouse_x, self.mouse_y, 10)
-        l12 = Line(mouse_position, PVector.__add__(mouse_position, PVector(100, 100)))
-        l12.draw()
+        print(f"Mouse pressed at {mouse_position}")
+        self.map.click(mouse_position)
 
-        print(
-            f"Mouse pressed at {mouse_position}, line = {l12.shape}, circle = {c11.shape}"
-        )
+    def key_pressed(self):
+        print(f"Key pressed: {self.key}")
+        self.map.input(int(self.key))
 
     def window_size_changed(self, width: int, height: int):
         print(f"Window size changed to {width} x {height}")

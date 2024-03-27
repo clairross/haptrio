@@ -1,12 +1,11 @@
 """This module contains the Haply class, which is used to control the Haply device."""
 
-from typing import Final
+from typing import Final, Callable
 from py5 import Py5Vector as PVector
 from system.ports import Ports
 from haply.types import Board, Device, Pantograph, COUNTER_CLOCKWISE
 from system.environment import DEVICE_PORT
 
-from py5 import py5sound 
 
 class Haply:
     HARDWARE_VERSION: Final[int] = (
@@ -24,6 +23,7 @@ class Haply:
     updating: bool = False
     current_force: PVector = PVector(0, 0)
     is_active: bool = False
+    position_change_callbacks: list[Callable[[PVector], None]]
 
     def __init__(self, com_port: str = DEVICE_PORT):
         ports = Ports()
@@ -53,6 +53,7 @@ However, you can continue using the program without it."
         self.device.add_encoder(2, COUNTER_CLOCKWISE, 12, self.TICKS_PER_ROTATION, 2)
         self.device.device_set_parameters()
         self.is_active = True
+        self.position_change_callbacks = []
         print("Haply device is active!")
 
     def update(self):
@@ -62,11 +63,23 @@ However, you can continue using the program without it."
             self.device.device_read_data()
             motorAngle = self.device.get_device_angles()
             device_position = self.device.get_device_position(motorAngle)
-            print("Device position: " + str(device_position))
+            device_position_vector = PVector(device_position[0], device_position[1])
+
+            for callback in self.position_change_callbacks:
+                callback(device_position_vector)
+            # print(f"Device position: {device_position_vector}")
 
         self.device.set_device_torques(self.current_force.tolist())
         self.device.device_write_torques()
         self.updating = False
+
+    def subscribe(self, callback: Callable[[PVector], None]):
+        """Subscribe to the Haply device."""
+        self.position_change_callbacks.append(callback)
+
+    def unsubscribe(self, callback: Callable[[PVector], None]):
+        """Unsubscribe from the Haply device."""
+        self.position_change_callbacks.remove(callback)
 
     def set_forces(self, force: PVector):
         """Set the forces to apply to the Haply."""

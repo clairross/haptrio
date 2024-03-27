@@ -35,6 +35,7 @@ class Shape(ABC):
     stroke_weight: float
     stroke_cap_style: int
     stroke_join_style: int
+    fill_color: Color
     uuid: str
     sketch: PSketch
 
@@ -43,6 +44,7 @@ class Shape(ABC):
         shape_type: int,
         visible: bool = True,
         enabled: bool = True,
+        fill_color: Color = color(0),
         stroke_color: Color = color(0),
         stroke_weight: float = 0,
         stroke_cap_style: int = SQUARE,
@@ -58,6 +60,7 @@ class Shape(ABC):
         self.shape_type = shape_type
         self.visible = visible
         self.enabled = enabled
+        self.fill_color = fill_color
         self.stroke_color = stroke_color
         self.stroke_weight = stroke_weight
         self.stroke_cap_style = stroke_cap_style
@@ -106,12 +109,20 @@ class Shape(ABC):
             uuid,
         )
 
+    def update_shape_attributes(self):
+        self.shape.set_stroke(self.stroke_color)
+        self.shape.set_stroke_weight(self.stroke_weight)
+        self.shape.set_stroke_cap(self.stroke_cap_style)
+        self.shape.set_stroke_join(self.stroke_join_style)
+        self.shape.set_visible(self.visible)
+        self.shape.set_fill(self.fill_color)
+
     def draw(self):
         if not self.visible:
             return
 
         # print(f"Drawing shape {self.uuid} at {self.get_position()}")
-        self.sketch.shape(self.shape, self.sketch.mouse_x, self.sketch.mouse_y)
+        self.sketch.shape(self.shape)
 
     def get_intersection(self, other: "Shape") -> PVector:
         other_type = other.shape_type
@@ -158,6 +169,10 @@ class Shape(ABC):
 
     def __get_intersection_circle(self, other: "Shape") -> PVector:
         raise NotImplementedError
+
+    @abstractmethod
+    def contains(self, point: PVector) -> bool:
+        pass
 
     @abstractmethod
     def get_position(self) -> PVector:

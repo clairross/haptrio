@@ -22,6 +22,7 @@ class ImageResources(TypedDict):
 
 
 class SoundResources(TypedDict):
+    error: str
     nota_a: str
     note_b: str
     note_c: str
@@ -30,7 +31,7 @@ class SoundResources(TypedDict):
     note_f: str
     note_g: str
     note_c_high: str
-    error: str
+
 
 class Resources(TypedDict):
     app_icon: str

@@ -1,6 +1,6 @@
 from typing import Optional
 import json
-from pvector import PVector
+from py5 import Py5Vector as PVector
 
 
 class Ellipse(Shape):
@@ -13,6 +13,12 @@ class Ellipse(Shape):
         self.size = PVector(size[0], size[1])
         self.center.mult(pixels_per_meter)
         self.size.mult(pixels_per_meter)
+
+    def contains(self, point: PVector) -> bool:
+        distance_x = (point.x - self.center.x) / self.size.x
+        distance_y = (point.y - self.center.y) / self.size.y
+        distance_squared = distance_x**2 + distance_y**2
+        return distance_squared <= 1
 
     def translate(self, direction: PVector):
         self.center.add(direction)

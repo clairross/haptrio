@@ -30,6 +30,17 @@ class Triangle(Shape):
         self.vertices.append(third_vertex * pixels_per_meter))
         self.shape = self.create_shape(TRIANGLE, first_vertex.x, first_vertex.y, second_vertex.x, second_vertex.y, third_vertex.x, third_vertex.y)
 
+    def contains(self, point: PVector) -> bool:
+        v0 = self.vertices[0]
+        v1 = self.vertices[1]
+        v2 = self.vertices[2]
+        d1 = (point.x - v2.x) * (v0.y - v2.y) - (v0.x - v2.x) * (point.y - v2.y)
+        d2 = (point.x - v0.x) * (v1.y - v0.y) - (v1.x - v0.x) * (point.y - v0.y)
+        d3 = (point.x - v1.x) * (v2.y - v1.y) - (v2.x - v1.x) * (point.y - v1.y)
+        has_neg = (d1 < 0) or (d2 < 0) or (d3 < 0)
+        has_pos = (d1 > 0) or (d2 > 0) or (d3 > 0)
+        return not (has_neg and has_pos)
+
     def translate(self, direction: PVector) -> None:
         for vertex in self.vertices:
             vertex.add(direction)

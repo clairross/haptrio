@@ -19,6 +19,8 @@ class Player:
     sketch: PSketch
     player_ball: Circle
     shell: Circle
+    velocity: PVector
+    __old_position: PVector
 
     def __init__(self, initial_position: PVector):
         print(f"Creating player at {initial_position}")
@@ -42,21 +44,26 @@ class Player:
         self.shell = Circle(initial_position, self.shell_size, color("#FF0000"))
         self.shell_penetration_distance = 0
         self.shell_penetration = PVector(0, 0)
+        self.__old_position = initial_position
+        self.velocity = PVector(0, 0)
         print(f"Player created at {self.position}")
         # self.shell = Circle(self.position, self.shellSize, py5.color(150))
 
-    def update(self, position_offset: PVector):
-        old_position = self.position
+    def update(self):
         old_shell_penetration_distance = self.shell_penetration_distance
-        self.move(position_offset)
+        # self.move(position_offset)
         self.update_shell_penetration()
 
         self.velocity = (
-            self.position - old_position
+            self.position - self.__old_position
         )  # / (GameTime.ElapsedGameTime.toNanos() / 1000000))
         self.is_moving_into_wall = (
             self.shell_penetration_distance > old_shell_penetration_distance
         )
+
+        self.player_ball.translate(self.velocity)
+        self.shell.translate(self.velocity)
+        self.__old_position = self.position
 
         if DEBUG_MODE:
             self.sketch.push_matrix()
@@ -67,14 +74,12 @@ class Player:
 
     def draw(self):
         # print(f"Drawing player at {self.position}")
-        self.sketch.shape(self.player_shell, self.position.x, self.position.y)
+        # self.sketch.shape(self.player_shell)
         self.sketch.push_matrix()
-        self.sketch.shape(self.player_shell)
-        self.sketch.push_matrix()
+        # self.sketch.shape(self.player_shell)
         # self.sketch.translate(self.position.x, self.position.y)
         self.player_ball.draw()
         self.shell.draw()
-        self.sketch.pop_matrix()
         self.sketch.pop_matrix()
 
     def get_shell_penetration_resistance_force(self) -> PVector:
@@ -92,7 +97,9 @@ class Player:
         return self.shell
 
     def move(self, direction: PVector) -> None:
-        self.position = direction * self.speed_multiplier
+        print(f"Moving player by {direction}")
+        self.position = self.position + (direction * self.speed_multiplier)
+        # self.player_shell.translate(direction.x, direction.y)
 
     def update_shell_penetration(self):
         shell_start_distance = (self.shell_size - self.player_size) / 2
