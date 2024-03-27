@@ -6,6 +6,7 @@ from system.ports import Ports
 from haply.types import Board, Device, Pantograph, COUNTER_CLOCKWISE
 from system.environment import DEVICE_PORT
 
+from py5 import py5sound 
 
 class Haply:
     HARDWARE_VERSION: Final[int] = (

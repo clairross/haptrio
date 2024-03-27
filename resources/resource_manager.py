@@ -18,11 +18,24 @@ class ImageResources(TypedDict):
     treble_clef: str
     treble_clef_staff: str
     user_icon_select: str
+    xylophone: str
 
+
+class SoundResources(TypedDict):
+    nota_a: str
+    note_b: str
+    note_c: str
+    note_d: str
+    note_e: str
+    note_f: str
+    note_g: str
+    note_c_high: str
+    error: str
 
 class Resources(TypedDict):
     app_icon: str
     images: ImageResources
+    sounds: SoundResources
 
 
 class ResourceManager(JsonReader):
