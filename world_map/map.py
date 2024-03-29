@@ -4,6 +4,7 @@ from interface.background import Background
 from interface.xylophone import Xylophone
 from shapes.rectangle import Rectangle
 from world_map.world import WORLD_HALF_WIDTH, WORLD_PIXEL_HEIGHT
+from processing.sketch_manager import SketchManager
 
 
 class Map:
@@ -36,6 +37,7 @@ class Map:
         self.xylophone.play_key(key)
 
     def click(self, mouse_position: PVector):
+        self.background.click(mouse_position)
         self.xylophone.click(mouse_position)
 
     def draw(self):
