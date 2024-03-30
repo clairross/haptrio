@@ -84,3 +84,8 @@ However, you can continue using the program without it."
     def set_forces(self, force: PVector):
         """Set the forces to apply to the Haply."""
         self.current_force = force
+
+
+    def testing_collisions(self):
+        """test"""
+        print (self.angles)
