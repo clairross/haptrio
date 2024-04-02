@@ -1,7 +1,7 @@
 from py5 import Py5Vector as PVector, Sketch as PSketch, ELLIPSE, color
 from processing.sketch_manager import SketchManager
 from shapes.circle import Circle
-from system.environment import DEBUG_MODE
+from system.environment import Environment
 
 
 class Player:
@@ -65,7 +65,7 @@ class Player:
         self.shell.translate(self.velocity)
         self.__old_position = self.position
 
-        if DEBUG_MODE:
+        if Environment.get().debug_mode:
             self.sketch.push_matrix()
             self.sketch.line(
                 self.position.x, self.position.y, old_position.x, old_position.y
