@@ -27,7 +27,7 @@ class Sketch(PSketch):
     player_controller: Controller
 
     def settings(self):
-        self.debug_mode = Environment.get("debug_mode")
+        self.debug_mode = Environment.get().debug_mode
 
         if self.debug_mode:
             self.diagnostics = Diagnostics()
