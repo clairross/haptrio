@@ -1,35 +1,33 @@
 """Environment variables"""
 
-from typing import TypeVar, Any, Final
+from typing import TypeVar, Any, Final, cast
 import ujson as json
 from shared_types._types import JSON
 from pathlib import Path
 import pathlib
+from system.json_reader import JsonReader
 
 ROOT_DIRECTORY: Final[Path] = pathlib.Path().resolve()
 
 
-class Environment:
+class EnvironmentVariables:
+    debug_mode: bool
+    port: str
+
+
+class Environment(JsonReader):
     """Environment variables"""
 
     T = TypeVar("T", JSON, str, int, float, bool, None)
     ENV_FILE_NAME = ".env"
     env_values: JSON
+    env_variables: EnvironmentVariables = cast(EnvironmentVariables, None)
 
     @staticmethod
-    def initialize():
-        with open(
-            f"{ROOT_DIRECTORY}/{Environment.ENV_FILE_NAME}", "r", encoding="utf-8"
-        ) as json_file:
-            Environment.env_values: JSON = json.load(json_file)
-            print(f"Env variables: {Environment.env_values}")
+    def get() -> EnvironmentVariables:
+        if not Environment.env_variables:
+            Environment.env_variables = Environment.get_object(
+                f"{ROOT_DIRECTORY}/{Environment.ENV_FILE_NAME}"
+            )
 
-    @staticmethod
-    def get(key: str) -> Any:
-        """Get environment variable by key."""
-        return Environment.env_values[key]
-
-
-Environment.initialize()
-DEBUG_MODE: Final[bool] = Environment.get("debug_mode")
-DEVICE_PORT: Final[str] = Environment.get("port")
+        return Environment.env_variables

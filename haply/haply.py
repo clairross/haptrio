@@ -4,7 +4,7 @@ from typing import Final, Callable
 from py5 import Py5Vector as PVector
 from system.ports import Ports
 from haply.types import Board, Device, Pantograph, COUNTER_CLOCKWISE
-from system.environment import DEVICE_PORT
+from system.environment import Environment
 
 
 class Haply:
@@ -25,13 +25,13 @@ class Haply:
     is_active: bool = False
     position_change_callbacks: list[Callable[[PVector], None]]
 
-    def __init__(self, com_port: str = DEVICE_PORT):
+    def __init__(self, com_port: str = Environment.get().port):
         ports = Ports()
 
         if not ports.has_port(com_port):
             self.port = ports.select_port()
         else:
-            self.port = DEVICE_PORT
+            self.port = Environment.get().port
 
         if self.port == "":
             print(
