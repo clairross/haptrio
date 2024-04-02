@@ -37,6 +37,7 @@ class Circle(Shape):
 
     def translate(self, direction: PVector):
         self.center = self.initial_position + direction
+        self.shape.translate(direction.x, direction.y)
 
     def get_position(self) -> PVector:
         return self.center

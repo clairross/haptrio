@@ -28,7 +28,7 @@ class MusicNotesAudio:
 
     def __init__(self) -> None:
 
-        resources: Resources = ResourceManager.get_resources()
+        resources: Resources = ResourceManager.get()
         sound_paths: SoundResources = resources.sounds
 
         self.notes = {

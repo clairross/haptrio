@@ -44,7 +44,7 @@ class Xylophone:
         ), f"Container height must be greater than {self.MIN_KEY_HEIGHT}"
         self.playing_keys = []
         self.sketch = SketchManager.get_current_sketch()
-        resources = ResourceManager.get_resources()
+        resources = ResourceManager.get()
         self.image = self.sketch.load_image(resources.images.xylophone)
         self.num_keys = num_keys
         self.key_colors = key_colors

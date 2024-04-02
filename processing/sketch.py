@@ -1,7 +1,14 @@
-from py5 import Sketch as PSketch, CORNER, Py5Vector as PVector, color
+from py5 import (
+    Sketch as PSketch,
+    CORNER,
+    Py5Vector as PVector,
+    color,
+    Py5KeyEvent as KeyEvent,
+    Py5MouseEvent as MouseEvent,
+)
 from system.operating_system import OperatingSystem
 from haply.haply import Haply
-from world_map.map import Map
+from world_map.scene import Scene
 from player.player import Player
 from scheduler.scheduler import Scheduler
 from system.diagnostics import Diagnostics
@@ -11,20 +18,17 @@ from shapes.circle import Circle
 from shapes.line import Line
 from resources.resource_manager import ResourceManager, Resources
 from processing.screen import Screen
-from haply.haply_controller import HaplyController
-from controls.controller import Controller
 from pygame.mixer import init as InitializeAudioMixer
 
 
 class Sketch(PSketch):
     haply: Haply
-    map: Map
+    scene: Scene
     player: Player
     updateScheduler: Scheduler[None]
     debug_mode: bool
     diagnostics: Diagnostics
     screen: Screen
-    player_controller: Controller
 
     def settings(self):
         self.debug_mode = Environment.get().debug_mode
@@ -40,16 +44,16 @@ class Sketch(PSketch):
     def setup(self):
 
         self.window_title("HapTrio")
-        resources: Resources = ResourceManager.get_resources()
+        resources: Resources = ResourceManager.get()
         self.screen.set_window_icon(f"{ROOT_DIRECTORY}/{resources.app_icon}")
         self.screen.set_window_resizable(True)
         self.frame_rate(self.screen.frame_rate)
         self.rect_mode(CORNER)
         InitializeAudioMixer()
-        self.map = Map()
+        self.scene = Scene()
         self.haply = Haply()
         self.player = Player(self.screen.center)
-        self.player_controller = HaplyController(self.player, self.haply)
+        self.haply.register_target(self.player)
 
         self.updateScheduler = Scheduler(1, self.update)
         self.updateScheduler.run()
@@ -58,11 +62,10 @@ class Sketch(PSketch):
         # print("Update")
         self.screen.update()
 
-        if self.haply.is_active:
+        if self.haply.is_enabled:
             self.haply.update()
 
-        self.map.update()
-        self.player_controller.update()
+        self.scene.update()
         self.player.update()
 
     def draw(self):
@@ -76,7 +79,7 @@ class Sketch(PSketch):
 
             # Center 0,0
             # self.translate(SCREEN_PIXEL_WIDTH, SCREEN_PIXEL_HEIGHT)
-            self.map.draw()
+            self.scene.draw()
             self.player.draw()
         except Exception as e:
             print(e.with_traceback)

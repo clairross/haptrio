@@ -13,14 +13,13 @@ ROOT_DIRECTORY: Final[Path] = pathlib.Path().resolve()
 class EnvironmentVariables:
     debug_mode: bool
     port: str
+    keyboard_enabled: bool
 
 
 class Environment(JsonReader):
     """Environment variables"""
 
-    T = TypeVar("T", JSON, str, int, float, bool, None)
     ENV_FILE_NAME = ".env"
-    env_values: JSON
     env_variables: EnvironmentVariables = cast(EnvironmentVariables, None)
 
     @staticmethod

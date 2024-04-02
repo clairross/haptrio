@@ -18,7 +18,7 @@ class Background:
     show_note_inventory: bool
 
     def __init__(self, image_path: str):
-        resources: Resources = ResourceManager.get_resources()
+        resources: Resources = ResourceManager.get()
         self.sketch = SketchManager.get_current_sketch()
         self.image_path = image_path
         self.image = self.sketch.load_image(self.image_path, dst=self.image)

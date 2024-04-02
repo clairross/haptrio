@@ -4,17 +4,16 @@ from interface.background import Background
 from interface.xylophone import Xylophone
 from shapes.rectangle import Rectangle
 from world_map.world import WORLD_HALF_WIDTH, WORLD_PIXEL_HEIGHT
-from processing.sketch_manager import SketchManager
 
 
-class Map:
+class Scene:
     """The map of the world.  This class is responsible for drawing the map"""
 
     background: Background
     xylophone: Xylophone
 
     def __init__(self):
-        resources: Resources = ResourceManager.get_resources()
+        resources: Resources = ResourceManager.get()
         self.background = Background(resources.images.staff)
         self.xylophone = Xylophone(
             Rectangle(WORLD_HALF_WIDTH - (580 / 2), WORLD_PIXEL_HEIGHT - 247, 580, 247),
