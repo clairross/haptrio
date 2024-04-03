@@ -92,7 +92,7 @@ class Sketch(PSketch):
         print("Mouse pressed")
         mouse_position = PVector(self.mouse_x, self.mouse_y)
         print(f"Mouse pressed at {mouse_position}")
-        self.map.click(mouse_position)
+        self.scene.click(mouse_position)
 
     def key_pressed(self):
         print(f"Key pressed: {self.key}")
