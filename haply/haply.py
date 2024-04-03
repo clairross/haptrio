@@ -52,8 +52,22 @@ However, you can continue using the program without it."
 
         self.device.add_actuator(1, COUNTER_CLOCKWISE, 2)
         self.device.add_actuator(2, COUNTER_CLOCKWISE, 1)
-        self.device.add_encoder(1, COUNTER_CLOCKWISE, 168, self.TICKS_PER_ROTATION, 1)
-        self.device.add_encoder(2, COUNTER_CLOCKWISE, 12, self.TICKS_PER_ROTATION, 2)
+
+        if Environment.get().flip_y_haply:
+            self.device.add_encoder(
+                1, COUNTER_CLOCKWISE, 168, self.TICKS_PER_ROTATION, 1
+            )
+            self.device.add_encoder(
+                2, COUNTER_CLOCKWISE, 12, self.TICKS_PER_ROTATION, 2
+            )
+        else:
+            self.device.add_encoder(
+                1, COUNTER_CLOCKWISE, 168, self.TICKS_PER_ROTATION, 2
+            )
+            self.device.add_encoder(
+                2, COUNTER_CLOCKWISE, 12, self.TICKS_PER_ROTATION, 1
+            )
+
         self.device.device_set_parameters()
         self.device_position = PVector(0, 0)
         print("Haply device is active!")

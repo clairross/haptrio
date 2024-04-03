@@ -22,6 +22,9 @@ Create a file called ".env" at the root of the project (it should be in the same
 {
     "port": "COM6", // Enter the string for the device you want to connect to. This likely starts with "COM"
     "debug_mode": false, // Turning this on will use more resources but display extra information, make sure it is off when demoing
+    "keyboard_enabled": false, // This allows control of the player with the keyboard instead of the Haply. Can be used for testing purposes but should remain off otherwise
+    "mouse_enabled": false, // This allows control of the player with the mouse instead of the Haply. Can be used for testing purposes but should remain off otherwise
+    "flip_y_haply": false // this flips the y-axis input for the haply since some of them are set up differently
 }
 ```
 

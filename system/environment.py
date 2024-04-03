@@ -14,6 +14,7 @@ class EnvironmentVariables:
     debug_mode: bool
     port: str
     keyboard_enabled: bool
+    flip_y_haply: bool
 
 
 class Environment(JsonReader):
