@@ -51,6 +51,12 @@ class Square(Shape):
             self.size * pixels_per_meter,
         )
 
+    def contains(self, point: PVector) -> bool:
+        return (
+            self.vertices[0].x <= point.x <= self.vertices[1].x
+            and self.vertices[0].y <= point.y <= self.vertices[3].y
+        )
+
     def translate(self, direction: PVector) -> None:
         for vertex in self.vertices:
             vertex.add(direction)

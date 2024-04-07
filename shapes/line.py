@@ -40,6 +40,13 @@ class Line(Shape):
             line_color,
         )
 
+    def contains(self, point: PVector) -> bool:
+        start = self.vertices[0]
+        end = self.vertices[1]
+        return (point.y - start.y) * (end.x - start.x) == (point.x - start.x) * (
+            end.y - start.y
+        )
+
     def translate(self, direction: PVector):
         start_vector = self.vertices[0]
         end_vector = self.vertices[1]

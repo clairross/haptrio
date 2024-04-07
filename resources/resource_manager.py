@@ -1,10 +1,8 @@
 from typing import TypedDict, cast
 from system.json_reader import JsonReader
 
-RESOURCES_PATH: str = "resources/resources.json"
 
-
-class ImageResources(TypedDict):
+class ImageResources:
     bass_clef: str
     bass_clef_staff: str
     eighth_note: str
@@ -21,8 +19,9 @@ class ImageResources(TypedDict):
     xylophone: str
 
 
-class SoundResources(TypedDict):
-    nota_a: str
+class SoundResources:
+    error: str
+    note_a: str
     note_b: str
     note_c: str
     note_d: str
@@ -30,20 +29,23 @@ class SoundResources(TypedDict):
     note_f: str
     note_g: str
     note_c_high: str
-    error: str
 
-class Resources(TypedDict):
+
+class Resources:
     app_icon: str
     images: ImageResources
     sounds: SoundResources
 
 
 class ResourceManager(JsonReader):
+    RESOURCES_PATH: str = "resources/resources.json"
     resources: Resources = cast(Resources, None)
 
     @staticmethod
-    def get_resources() -> Resources:
+    def get() -> Resources:
         if not ResourceManager.resources:
-            ResourceManager.resources = ResourceManager.get_object(RESOURCES_PATH)
+            ResourceManager.resources = ResourceManager.get_object(
+                ResourceManager.RESOURCES_PATH
+            )
 
         return ResourceManager.resources

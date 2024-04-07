@@ -5,6 +5,7 @@ https://gitlab.com/Haply/2diy/pyhapi/-/blob/master/src/HaplyHAPI.py?ref_type=hea
 """
 
 import sys
+import time
 from typing import List, Final
 from HaplyHAPI import (
     Actuator as HActuator,
@@ -147,21 +148,22 @@ class Board(HBoard):
         self, communicationType: int, deviceID: int, expected: int
     ) -> List[float]:
         """Receive data from device"""
-        # expected = expected - 1  # REMOVE
-        inData = bytearray(1 + 4 * expected)
-        data = [None] * expected
-        # print("Receiving data from the device.")
-        inData = self._Board__port.read(1 + 4 * expected + 1)
-        # print("Data received from the device, inData: " + str(inData))
-        if inData[0] != deviceID:
-            sys.stderr.write("Error, another device expects this data!\n")
-        buf = inData[1 : expected * 4 + 1]
-        for i in range(0, expected):
-            data[i] = self.bytes_to_float(buf[i * 4 : i * 4 + 4])
-        # data = struct.unpack('!'+str(expected)+'f', buf)
-        # print(expected)
-        # print(data)
-        return data
+        return super().receive(communicationType, deviceID, expected)
+        # # expected = expected - 1  # REMOVE
+        # inData = bytearray(1 + 4 * expected)
+        # data = [None] * expected
+        # # print("Receiving data from the device.")
+        # inData = self._Board__port.read(1 + 4 * expected + 1)
+        # # print("Data received from the device, inData: " + str(inData))
+        # if inData[0] != deviceID:
+        #     sys.stderr.write("Error, another device expects this data!\n")
+        # buf = inData[1 : expected * 4 + 1]
+        # for i in range(0, expected):
+        #     data[i] = self.bytes_to_float(buf[i * 4 : i * 4 + 4])
+        # # data = struct.unpack('!'+str(expected)+'f', buf)
+        # # print(expected)
+        # # print(data)
+        # return data
 
     def data_available(self) -> bool:
         """Check if data is available"""
@@ -279,6 +281,7 @@ class Device(HDevice):
 
     def __init__(self, deviceID: int, deviceLink: Board):
         super().__init__(deviceID, deviceLink)
+        self.vibration_active = False
 
     def add_actuator(self, actuator: int, rotation: int, port: int) -> None:
         """Add an actuator to the device"""

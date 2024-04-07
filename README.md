@@ -22,6 +22,9 @@ Create a file called ".env" at the root of the project (it should be in the same
 {
     "port": "COM6", // Enter the string for the device you want to connect to. This likely starts with "COM"
     "debug_mode": false, // Turning this on will use more resources but display extra information, make sure it is off when demoing
+    "keyboard_enabled": false, // This allows control of the player with the keyboard instead of the Haply. Can be used for testing purposes but should remain off otherwise
+    "mouse_enabled": false, // This allows control of the player with the mouse instead of the Haply. Can be used for testing purposes but should remain off otherwise
+    "flip_y_haply": false // this flips the y-axis input for the haply since some of them are set up differently
 }
 ```
 
@@ -44,6 +47,7 @@ Then type `pip help` to check that it worked. It should show a list of commands.
 - `py5`, Python support of [Processing 5](http://py5coding.org/).
 - `HaplyHAPI` - The Python implementation of hAPI, [Pyhapi](https://gitlab.com/Haply/2diy/pyhapi/-/tree/master).
 - `ujson` - A faster library than the built-in `json` which allows the reading of `.json` files from the computer.
+- `pygame` - Uses the `pygame.mixer` module to play audio in multiple channels.
 - `install-jdk` - The Java Development Kit for Python, which allows the use of Processing, which is originally based in Java.
 
 To install the right version of Java use `python -c "import jdk; print('Java installed to', jdk.install('17'))"`

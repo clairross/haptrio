@@ -1,7 +1,14 @@
-from py5 import Sketch as PSketch, CORNER, Py5Vector as PVector, color
+from py5 import (
+    Sketch as PSketch,
+    CORNER,
+    Py5Vector as PVector,
+    color,
+    Py5KeyEvent as KeyEvent,
+    Py5MouseEvent as MouseEvent,
+)
 from system.operating_system import OperatingSystem
 from haply.haply import Haply
-from world_map.map import Map
+from world_map.scene import Scene
 from player.player import Player
 from scheduler.scheduler import Scheduler
 from system.diagnostics import Diagnostics
@@ -11,11 +18,12 @@ from shapes.circle import Circle
 from shapes.line import Line
 from resources.resource_manager import ResourceManager, Resources
 from processing.screen import Screen
+from pygame.mixer import init as InitializeAudioMixer
 
 
 class Sketch(PSketch):
     haply: Haply
-    map: Map
+    scene: Scene
     player: Player
     updateScheduler: Scheduler[None]
     debug_mode: bool
@@ -23,7 +31,7 @@ class Sketch(PSketch):
     screen: Screen
 
     def settings(self):
-        self.debug_mode = Environment.get("debug_mode")
+        self.debug_mode = Environment.get().debug_mode
 
         if self.debug_mode:
             self.diagnostics = Diagnostics()
@@ -36,27 +44,30 @@ class Sketch(PSketch):
     def setup(self):
 
         self.window_title("HapTrio")
-        resources: Resources = ResourceManager.get_resources()
+        resources: Resources = ResourceManager.get()
         self.screen.set_window_icon(f"{ROOT_DIRECTORY}/{resources.app_icon}")
         self.screen.set_window_resizable(True)
         self.frame_rate(self.screen.frame_rate)
         self.rect_mode(CORNER)
-        self.map = Map()
+        InitializeAudioMixer()
+        self.scene = Scene()
         self.haply = Haply()
         self.player = Player(self.screen.center)
+        self.haply.register_target(self.player)
 
         self.updateScheduler = Scheduler(1, self.update)
         self.updateScheduler.run()
 
     def update(self):
         # print("Update")
+        # print("position is: ", self.haply.device_position)
         self.screen.update()
 
-        if self.haply.is_active:
+        if self.haply.is_enabled:
             self.haply.update()
 
-        self.map.update()
-        self.player.update(PVector(0, 0))
+        self.scene.update()
+        self.player.update()
 
     def draw(self):
         if self.updateScheduler.is_running:
@@ -69,7 +80,7 @@ class Sketch(PSketch):
 
             # Center 0,0
             # self.translate(SCREEN_PIXEL_WIDTH, SCREEN_PIXEL_HEIGHT)
-            self.map.draw()
+            self.scene.draw()
             self.player.draw()
         except Exception as e:
             print(e.with_traceback)
@@ -79,18 +90,14 @@ class Sketch(PSketch):
         print("Exiting")
 
     def mouse_pressed(self):
-        print("Mouse pressed")
+        # print("Mouse pressed")
         mouse_position = PVector(self.mouse_x, self.mouse_y)
-        c11 = Circle(mouse_position, 10, fill_color=color(255, 0, 0))
-        c11.draw()
-        self.fill(randint(1, 255), randint(1, 255), randint(1, 255))
-        self.square(self.mouse_x, self.mouse_y, 10)
-        l12 = Line(mouse_position, PVector.__add__(mouse_position, PVector(100, 100)))
-        l12.draw()
-
-        print(
-            f"Mouse pressed at {mouse_position}, line = {l12.shape}, circle = {c11.shape}"
-        )
+        print(f"Mouse pressed at {mouse_position}")
+        self.scene.click(mouse_position)
+    
+    def key_pressed(self):
+        print(f"Key pressed: {self.key}")
+        self.map.input(int(self.key))
 
     def window_size_changed(self, width: int, height: int):
         print(f"Window size changed to {width} x {height}")

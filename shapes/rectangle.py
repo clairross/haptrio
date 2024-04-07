@@ -1,58 +1,150 @@
-from abc import ABC, abstractmethod
-from typing import List
-from dataclasses import dataclass
+from typing import List, Union
+from py5 import (
+    Py5Vector as PVector,
+    RECT,
+    CORNER,
+    CORNERS,
+    CENTER,
+    RADIUS,
+    SQUARE,
+    MITER,
+    Py5Color as Color,
+    color,
+)
+from shapes.shape import Shape
+from shapes.circle import Circle
+from shared_types._types import JSON
+
+RectMode = Union[CORNER, CORNERS, CENTER, RADIUS]
 
 
 class Rectangle(Shape):
-    def __init__(self, obj):
-        super().__init__(obj, "RECT")
+    center: PVector
+    size: PVector
+    top_left: PVector
+    top_right: PVector
+    bottom_right: PVector
+    bottom_left: PVector
+    vertices: List[PVector]
+    original_vertices: List[PVector]
+    rect_mode: RectMode
+    fill_color: Color
+    corner_radius: float
+
+    def __init__(
+        self,
+        x: float,
+        y: float,
+        width: float,
+        height: float,
+        corner_radius: float = 0,
+        rect_mode: RectMode = CORNER,
+        fill_color: Color = color(0),
+        visible: bool = True,
+        enabled: bool = True,
+        stroke_color: Color = color(0),
+        stroke_weight: float = 0,
+        stroke_cap_style: int = SQUARE,
+        stroke_join_style: int = MITER,
+    ):
+        super().__init__(
+            RECT,
+            visible=visible,
+            enabled=enabled,
+            fill_color=fill_color,
+            stroke_color=stroke_color,
+            stroke_weight=stroke_weight,
+            stroke_cap_style=stroke_cap_style,
+            stroke_join_style=stroke_join_style,
+        )
         self.vertices = []
-        self.originalVertices = []
-        self.center = PVector(obj["center"][0], obj["center"][1])
-        self.size = PVector(obj["size"][0], obj["size"][1])
-        self.topLeft = PVector(
+        self.original_vertices = []
+        self.rect_mode = rect_mode
+        self.fill_color = fill_color
+        self.corner_radius = corner_radius
+
+        if rect_mode == CORNER:
+            self.center = PVector(x + width / 2, y + height / 2)
+            self.size = PVector(width, height)
+        elif rect_mode == CORNERS:
+            self.center = PVector((x + width) / 2, (y + height) / 2)
+            self.size = PVector(abs(x - width), abs(y - height))
+        elif rect_mode == CENTER:
+            self.center = PVector(x, y)
+            self.size = PVector(width, height)
+        elif rect_mode == RADIUS:
+            self.center = PVector(x, y)
+            self.size = PVector(width * 2, height * 2)
+
+        self.top_left = PVector(
             self.center.x - self.size.x / 2, self.center.y - self.size.y / 2
         )
-        self.topRight = PVector(
+        self.top_right = PVector(
             self.center.x + self.size.x / 2, self.center.y - self.size.y / 2
         )
-        self.bottomRight = PVector(
+        self.bottom_right = PVector(
             self.center.x + self.size.x / 2, self.center.y + self.size.y / 2
         )
-        self.bottomLeft = PVector(
+        self.bottom_left = PVector(
             self.center.x - self.size.x / 2, self.center.y + self.size.y / 2
         )
-        self.vertices.append(self.topLeft)
-        self.vertices.append(self.topRight)
-        self.vertices.append(self.bottomRight)
-        self.vertices.append(self.bottomLeft)
-        self.originalVertices.append(self.topLeft.copy())
-        self.originalVertices.append(self.topRight.copy())
-        self.originalVertices.append(self.bottomRight.copy())
-        self.originalVertices.append(self.bottomLeft.copy())
+        self.vertices.append(self.top_left)
+        self.vertices.append(self.top_right)
+        self.vertices.append(self.bottom_right)
+        self.vertices.append(self.bottom_left)
+        self.original_vertices = self.vertices.copy()
+        self.shape = self.sketch.create_shape(
+            RECT,
+            self.top_left.x,
+            self.top_left.y,
+            self.size.x,
+            self.size.y,
+            self.corner_radius,
+        )
+        self.update_shape_attributes()
 
-    def Translate(self, direction):
-        self.vertices[0] = direction + self.originalVertices[0]
-        self.vertices[1] = direction + self.originalVertices[1]
-        self.vertices[2] = direction + self.originalVertices[2]
-        self.vertices[3] = direction + self.originalVertices[3]
-        self.center.add(direction)
+    @classmethod
+    def from_vectors(
+        cls, position: PVector, size: PVector, rect_mode: RectMode = CORNER
+    ) -> "Rectangle":
+        return Rectangle(position.x, position.y, size.x, size.y, rect_mode=rect_mode)
 
-    def GetPosition(self):
+    @classmethod
+    def from_json(cls, json: JSON) -> "Rectangle":
+        fill_color = cls.get_color_from_json(cls, json, "fillColor")
+        center = json["center"]
+        size = obj["size"]
+
+        return Rectangle(center.x, center.y, size.x, size.y)
+
+    def contains(self, point: PVector) -> bool:
+        return (
+            self.top_left.x <= point.x <= self.top_right.x
+            and self.top_left.y <= point.y <= self.bottom_left.y
+        )
+
+    def translate(self, direction: PVector):
+        self.vertices[0] = direction + self.original_vertices[0]
+        self.vertices[1] = direction + self.original_vertices[1]
+        self.vertices[2] = direction + self.original_vertices[2]
+        self.vertices[3] = direction + self.original_vertices[3]
+        self.center = self.center + direction
+
+    def get_position(self):
         return self.center
 
-    def GetVertices(self):
+    def get_vertices(self):
         return self.vertices
 
-    def GetCenter(self):
+    def get_center(self):
         return self.center
 
-    def GetSize(self):
+    def get_size(self):
         return self.size
 
-    def GetIntersectionCircle(self, other):
-        centerX = self.center.x
-        centerY = self.center.y
+    def __get_intersection_circle(self, other: Circle):
+        # center_x = self.center.x
+        # center_y = self.center.y
         radius = other.radius
         current_center = self.vertices[0].copy() + self.size.copy() / 2
 
@@ -68,7 +160,7 @@ class Rectangle(Shape):
 
         return None
 
-    def Print(self):
+    def print(self):
         print(
-            f"Rectangle {self.id}: Center = {self.center} Size = {self.size} Vertices = {self.originalVertices}"
+            f"Rectangle {self.uuid}: Center = {self.center} Size = {self.size} Vertices = {self.vertices}"
         )

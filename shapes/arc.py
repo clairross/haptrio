@@ -19,6 +19,9 @@ class Arc(Shape):
         self.center.mult(pixels_per_meter)
         self.size.mult(pixels_per_meter)
 
+    def contains(self, point: PVector) -> bool:
+        return False
+
     def translate(self, direction: PVector):
         self.center.add(direction)
 
