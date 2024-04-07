@@ -117,36 +117,22 @@ class Xylophone:
 
     def hover_check(self, mouse_position: PVector):
         for i, key in enumerate(self.keys):
+            if i in self.playing_keys:
+                return
             if key.contains(mouse_position):
                 self.hover_key(i)
             
 
     def hover_key(self, key_index: int):
-        if key_index in self.playing_keys:
-            return
-
         def reset_color():
             self.keys[key_index].shape.set_fill(original_color)
-            self.playing_keys.remove(key_index)
 
-        self.playing_keys.append(key_index)
         original_color = self.keys[key_index].fill_color
         darker_color = self.get_darker_color(original_color)
         self.keys[key_index].shape.set_fill(darker_color)
         timer = Timer(1, reset_color)
         timer.daemon = True
         timer.start()
-
-    def get_brighter_color(self, old_color: Color, increase: int = 10):
-        self.sketch.color_mode(HSB, 100)
-        h = self.sketch.hue(old_color)
-        s = self.sketch.saturation(old_color)
-        b = self.sketch.brightness(old_color)
-        b = min(100, b + increase)  # ensure brightness doesn't exceed 100
-        brighter_color = color(h, s, b)
-        self.sketch.color_mode(RGB, 255)  # switch back to default color mode
-        return brighter_color
-
 
     def play_key(self, key_index: int):
         if key_index in self.playing_keys:
@@ -166,7 +152,7 @@ class Xylophone:
 
         self.key_sounds[key_index].play()
 
-    def get_brighter_color(self, old_color: Color, increase: int = 10):
+    def get_brighter_color(self, old_color: Color, increase: int = 5):
         self.sketch.color_mode(HSB, 100)
         h = self.sketch.hue(old_color)
         s = self.sketch.saturation(old_color)
@@ -176,14 +162,12 @@ class Xylophone:
         self.sketch.color_mode(RGB, 255)  # switch back to default color mode
         return brighter_color
     
-    def get_darker_color(self, old_color: Color, decrease: int = 20):
+    def get_darker_color(self, old_color: Color, decrease: int = 50):
         self.sketch.color_mode(HSB, 100)  # Switch to HSB mode
         h = self.sketch.hue(old_color)
         s = self.sketch.saturation(old_color)
         b = self.sketch.brightness(old_color)    
-        # Decrease brightness
         b = max(0, b - decrease)  # Prevent going below 0
-        # Create new darker color
         darker_color = self.sketch.color(h, s, b)
         self.sketch.color_mode(RGB, 255)  # Switch back to RGB mode
         return darker_color
