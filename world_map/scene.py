@@ -43,5 +43,9 @@ class Scene:
         self.background.draw()
         self.xylophone.draw()
 
+    def hover(self, mouse_position: PVector):
+        self.background.hover(mouse_position)
+        self.xylophone.hover(mouse_position)
+
     def update(self):
         return

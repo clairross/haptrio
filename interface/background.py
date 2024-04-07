@@ -70,3 +70,6 @@ class Background:
         print("Selection box clicked")
         self.show_note_inventory = self.selection_box_container.contains(mouse_position)
         return True
+    
+    def hover(self, mouse_position: PVector):
+        print("Hovered!*********************************************************************")

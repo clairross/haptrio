@@ -5,6 +5,7 @@ https://gitlab.com/Haply/2diy/pyhapi/-/blob/master/src/HaplyHAPI.py?ref_type=hea
 """
 
 import sys
+import time
 from typing import List, Final
 from HaplyHAPI import (
     Actuator as HActuator,
@@ -280,6 +281,7 @@ class Device(HDevice):
 
     def __init__(self, deviceID: int, deviceLink: Board):
         super().__init__(deviceID, deviceLink)
+        self.vibration_active = False
 
     def add_actuator(self, actuator: int, rotation: int, port: int) -> None:
         """Add an actuator to the device"""

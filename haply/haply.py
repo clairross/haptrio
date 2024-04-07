@@ -97,5 +97,6 @@ However, you can continue using the program without it."
 
     def get_state(self) -> ControllerState:
         """Get the input from the Haply device."""
-
         return ControllerState((self.device_position.x, self.device_position.y), False)
+    
+

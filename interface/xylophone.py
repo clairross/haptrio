@@ -93,6 +93,7 @@ class Xylophone:
             )
             for i in range(0, num_keys)
         ]
+        self.hovered_key_index = None
 
     def draw(self):
         # self.sketch.image(
@@ -100,14 +101,29 @@ class Xylophone:
         # )
 
         # self.back_quadrilateral.draw()
+        mouse_position = PVector(self.sketch.mouse_x, self.sketch.mouse_y)
+        self.hover(mouse_position)
 
-        for key in self.keys:
+        for i, key in enumerate(self.keys):
+            if i == self.hovered_key_index:
+                # Change to a brighter color when hovering
+                key.fill_color = self.get_brighter_color(self.key_colors[i % len(self.key_colors)])
+            else:
+                # Revert to original color
+                key.fill_color = self.key_colors[i % len(self.key_colors)]
             key.draw()
 
     def click(self, mouse_position: PVector):
         for i, key in enumerate(self.keys):
             if key.contains(mouse_position):
                 self.play_key(i)
+
+    def hover(self, mouse_position: PVector):
+        for i, key in enumerate(self.keys):
+            if key.contains(mouse_position):
+                self.hovered_key_index = i
+                return
+        self.hovered_key_index = None  # No key is hovered
 
     def play_key(self, key_index: int):
         if key_index in self.playing_keys:

@@ -60,6 +60,7 @@ class Sketch(PSketch):
 
     def update(self):
         # print("Update")
+        # print("position is: ", self.haply.device_position)
         self.screen.update()
 
         if self.haply.is_enabled:
@@ -89,11 +90,16 @@ class Sketch(PSketch):
         print("Exiting")
 
     def mouse_pressed(self):
-        print("Mouse pressed")
+        # print("Mouse pressed")
         mouse_position = PVector(self.mouse_x, self.mouse_y)
         print(f"Mouse pressed at {mouse_position}")
         self.scene.click(mouse_position)
 
+    def mouse_hovered(self):
+        mouse_position = PVector(self.mouse_x, self.mouse_y)
+        print(f"Mouse hovered at {mouse_position}")
+        self.scene.hover(self, mouse_position)
+    
     def key_pressed(self):
         print(f"Key pressed: {self.key}")
         self.map.input(int(self.key))
