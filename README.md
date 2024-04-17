@@ -49,6 +49,7 @@ Then type `pip help` to check that it worked. It should show a list of commands.
 - `ujson` - A faster library than the built-in `json` which allows the reading of `.json` files from the computer.
 - `pygame` - Uses the `pygame.mixer` module to play audio in multiple channels.
 - `install-jdk` - The Java Development Kit for Python, which allows the use of Processing, which is originally based in Java.
+- `watchdog` - Enable hot reloading so the app refreshes when saving a file
 
 To install the right version of Java use `python -c "import jdk; print('Java installed to', jdk.install('17'))"`
 

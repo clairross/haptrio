@@ -37,6 +37,8 @@ class Arc(Shape):
     def get_size(self) -> PVector:
         return self.size
 
+    def __get_intersection_rect(self, other: "Rectangle") -> Optional[PVector]:
+
     def print(self):
         print(
             f"Arc {self.id}: Center = {self.center}, Size = {self.size}, Start Angle = {self.start_angle}, End Angle = {self.end_angle}, Mode = {self.mode}"

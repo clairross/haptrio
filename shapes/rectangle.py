@@ -160,6 +160,31 @@ class Rectangle(Shape):
 
         return None
 
+    def __get_intersection_rect(self, other: "Shape") -> PVector:
+        dx = abs(self.center.x - other.center.x)
+        dy = abs(self.center.y - other.center.y)
+
+        if dx > (other.size.x / 2 + self.size.x / 2) or dy > (
+            other.size.y / 2 + self.size.y / 2
+        ):
+            return None
+
+        if dx <= other.size.x / 2:
+            x = other.center.x
+        elif self.center.x < other.center.x:
+            x = other.center.x - other.size.x / 2
+        else:
+            x = other.center.x + other.size.x / 2
+
+        if dy <= other.size.y / 2:
+            y = other.center.y
+        elif self.center.y < other.center.y:
+            y = other.center.y - other.size.y / 2
+        else:
+            y = other.center.y + other.size.y / 2
+
+        return PVector(x, y)
+
     def print(self):
         print(
             f"Rectangle {self.uuid}: Center = {self.center} Size = {self.size} Vertices = {self.vertices}"

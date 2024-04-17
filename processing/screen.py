@@ -8,6 +8,7 @@ from py5 import (
     Py5Vector as PVector,
 )
 from processing.sketch_manager import SketchManager
+from world_map.world import WORLD_PIXEL_WIDTH, WORLD_PIXEL_HEIGHT
 
 
 class Screen:
@@ -19,8 +20,8 @@ class Screen:
     __screen_changed_callbacks: list[Callable[[int, int], None]]
 
     def __init__(self) -> None:
-        self.width = 2000
-        self.height = 1000
+        self.width = WORLD_PIXEL_WIDTH
+        self.height = WORLD_PIXEL_HEIGHT
         self.frame_rate = 120
         self.center = PVector(self.width / 2, self.height / 2)
         self.sketch = SketchManager.get_current_sketch()

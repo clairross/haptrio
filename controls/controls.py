@@ -30,3 +30,4 @@ class ControllerState(NamedTuple):
 
     movement: tuple[float, float]
     selection: bool
+    play: bool

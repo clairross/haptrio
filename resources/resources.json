@@ -26,5 +26,8 @@
           "note_f": "resources/sounds/F.wav",
           "note_g": "resources/sounds/G.wav",
           "note_c_high": "resources/sounds/C2.wav" 
-        } 
+        },
+        "songs": {
+            "song_notes": "resources/songs/song_notes.json"
+        }
 }

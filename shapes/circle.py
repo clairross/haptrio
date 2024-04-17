@@ -51,6 +51,9 @@ class Circle(Shape):
     def get_size(self) -> float:
         return self.diameter
 
+    def get_intersection(self, other: "Shape") -> Union[PVector, None]:
+        return self.__get_intersection_rect(other)
+
     def __get_intersection_line(self, line: "Line") -> Union[PVector, None]:
         # Calculate the distance between the circle center and the line
         distance = line.distance_to_point(self.center)
@@ -69,26 +72,26 @@ class Circle(Shape):
         else:
             return None
 
-    def __get_intersection_rect(self, rect: "Rectangle") -> Union[PVector, None]:
+    def __get_intersection_rect(self, rect: "Shape") -> Union[PVector, None]:
         dx = abs(self.center.x - rect.center.x)
         dy = abs(self.center.y - rect.center.y)
 
-        if dx > (rect.width / 2 + self.radius) or dy > (rect.height / 2 + self.radius):
+        if dx > (rect.size.x / 2 + self.radius) or dy > (rect.size.y / 2 + self.radius):
             return None
 
-        if dx <= rect.width / 2:
+        if dx <= rect.size.x / 2:
             x = rect.center.x
         elif self.center.x < rect.center.x:
-            x = rect.center.x - rect.width / 2
+            x = rect.center.x - rect.size.x / 2
         else:
-            x = rect.center.x + rect.width / 2
+            x = rect.center.x + rect.size.x / 2
 
-        if dy <= rect.height / 2:
+        if dy <= rect.size.y / 2:
             y = rect.center.y
         elif self.center.y < rect.center.y:
-            y = rect.center.y - rect.height / 2
+            y = rect.center.y - rect.size.y / 2
         else:
-            y = rect.center.y + rect.height / 2
+            y = rect.center.y + rect.size.y / 2
 
         distance = self.center.dist(PVector(x, y))
         penetration = self.radius - distance
@@ -97,8 +100,8 @@ class Circle(Shape):
             direction = PVector(x, y) - self.center
             direction.normalize()
             return direction * penetration
-        else:
-            return None
+
+        return None
 
     def __get_intersection_square(self, square: "Square") -> Union[PVector, None]:
         distance = self.center.dist(square.center)

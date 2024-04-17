@@ -1,12 +1,17 @@
-from py5 import Py5Vector as PVector, Sketch as PSketch, ELLIPSE, color
+from py5 import Py5Vector as PVector, Sketch as PSketch, color
 from processing.sketch_manager import SketchManager
 from shapes.circle import Circle
 from system.environment import Environment
 from controls.controllable import Controllable
 from controls.controls import ControllerState
+from physics.force_generator import ForceGenerator
+from collisions.collidable_item import CollidableItem
+from collisions.collision_layer import CollisionLayer
+from collisions.collision_manager import CollisionManager
+from physics.force_manager import ForceManager
 
 
-class Player(Controllable):
+class Player(Controllable, ForceGenerator):
     position: PVector
     speed_multiplier: float = 50
     player_size: float = 50
@@ -37,7 +42,10 @@ class Player(Controllable):
         self.shell_penetration_distance = 0
         self.shell_penetration = PVector(0, 0)
         self.velocity = PVector(0, 0)
+        self.layer = CollisionLayer.PLAYER
         print(f"Player created at {self.position}")
+        ForceManager.add_force_generator(self)
+        CollisionManager.add_item(self)
         # self.shell = Circle(self.position, self.shellSize, py5.color(150))
 
     def update(self):
@@ -53,7 +61,7 @@ class Player(Controllable):
         )  # / (GameTime.ElapsedGameTime.toNanos() / 1000000))
         self.__old_position = self.position.copy
 
-        print(f"Player velocity: {self.velocity}")
+        # print(f"Player velocity: {self.velocity}")
 
         self.player_ball.translate(self.velocity)
         self.shell.translate(self.velocity)
@@ -78,7 +86,8 @@ class Player(Controllable):
 
         self.move(movement)
 
-    def get_shell_penetration_resistance_force(self) -> PVector:
+    def get_current_force(self) -> PVector:
+        return PVector(0, 0)
         shell_penetration_force = (
             self.position.copy.set_mag(self.shell_penetration_distance)
             * self.k_spring_shell
@@ -90,7 +99,7 @@ class Player(Controllable):
         return shell_penetration_force * -1
 
     def move(self, direction: PVector) -> None:
-        print(f"Moving player by {direction}")
+        # print(f"Moving player by {direction}")
         self.position = self.position + (direction * self.speed_multiplier)
 
     def __get_shell_penetration_magnitude(self):

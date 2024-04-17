@@ -7,6 +7,7 @@ from system.ports import Ports
 from haply.types import Board, Device, Pantograph, COUNTER_CLOCKWISE
 from system.environment import Environment
 from controls.controller import Controller
+from physics.force_manager import ForceManager
 
 
 class Haply(Controller):
@@ -23,7 +24,6 @@ class Haply(Controller):
     board: Board
     device: Device
     updating: bool = False
-    current_force: PVector = PVector(0, 0)
     device_position: PVector
 
     def __init__(self, com_port: str = Environment.get().port):
@@ -87,15 +87,13 @@ However, you can continue using the program without it."
             )
             # print(f"Device position: {device_position_vector}")
 
-        self.device.set_device_torques(self.current_force.tolist())
+        self.device.set_device_torques(ForceManager.get_current_force_sum().tolist())
         self.device.device_write_torques()
         self.updating = False
-
-    def set_forces(self, force: PVector):
-        """Set the forces to apply to the Haply."""
-        self.current_force = force
 
     def get_state(self) -> ControllerState:
         """Get the input from the Haply device."""
 
-        return ControllerState((self.device_position.x, self.device_position.y), False)
+        return ControllerState(
+            (self.device_position.x, self.device_position.y), False, False
+        )
